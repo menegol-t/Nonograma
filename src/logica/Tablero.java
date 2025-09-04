@@ -12,22 +12,18 @@ public class Tablero {
 	public Tablero()
 	{
 		
-		
-		
 		this.tablero = new int[5][5];
 				
 		this.referenciasCol = new int[5][3];
 		
 		this.referenciasFila = new int [5][3];
 		
-		
-		
-		System.out.println("Terminado");
+		//System.out.println("Terminado");
 	}
 	
 	private static void generarTablero(int[][] tablero)
 	{
-		//Para 5x5 un 50% es decir 12,5, redondeamos a 13, casillas rellenas es ideal
+		//Para un tablero 5x5 es ideal que la mitad de las casillas (13) esten llenas
 		int _largoTablero = tablero[0].length;
 		
 		int[] _patronAleatorio = randomSinRepetir(_largoTablero);
@@ -64,9 +60,7 @@ public class Tablero {
 	private static int rellenarTablero(int[] fila, int casillasNegrasDisponibles, int maximo, int minimo, Random rand)
 	{	
 		
-		
 		int _cantNegras = rand.nextBoolean() ? maximo : minimo;
-		
 		
 		System.out.println(_cantNegras);
 		
@@ -84,6 +78,7 @@ public class Tablero {
 		    int _posicionElegida = _posicionesDisponibles.remove(_indiceAleatorio);
 		    fila[_posicionElegida] = 1;
 		}	
+		
 		return _cantNegras;
 	}
 
@@ -103,6 +98,7 @@ public class Tablero {
 		Random _random = new Random();
 		
 		int _posicionActual = 0;
+		
 		while (_indicesDisponibles.size() != 0)
 		{
 			int _indexAleatorio = _random.nextInt(_indicesDisponibles.size());
@@ -141,7 +137,7 @@ public class Tablero {
 	{
 		if(respuestaCorrecta(respuesta)) return true;
 		
-		else return  false;
+		return false;
 	}
 	
 	private boolean respuestaCorrecta(int [][] respuesta)
