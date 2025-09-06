@@ -5,117 +5,183 @@ import java.util.Random;
 
 public class Tablero {
 
-	private int[][]  tablero;
-	private int[][]  referenciasCol;
-	private int[][]  referenciasFila;
+	private int[][]  _tablero;
+	private int[][]  _referenciasCol;
+	private int[][]  _referenciasFila;
 	
-	public Tablero()
+	private Tablero(int[][] tablero, int[][]referenciasCol, int[][] referenciasFila)
 	{
-		
-		this.tablero = new int[5][5];
+		_tablero = tablero;
 				
-		this.referenciasCol = new int[5][3];
+		_referenciasCol = referenciasCol;
 		
-		this.referenciasFila = new int [5][3];
-		
-		//System.out.println("Terminado");
+		_referenciasFila = referenciasFila;
 	}
 	
-	private static void generarTablero(int[][] tablero)
-	{
-		//Para un tablero 5x5 es ideal que la mitad de las casillas (13) esten llenas
-		int _largoTablero = tablero[0].length;
-		
-		int[] _patronAleatorio = randomSinRepetir(_largoTablero);
-		
-		int _totalCasillasNegras = Math.round((_largoTablero * _largoTablero) * 0.5f);
-		
-		int _casillasNegrasDisponibles = _totalCasillasNegras;
-		
-		int _maximo = 0; int _minimo = 0;
-		
-		Random random = new Random();
-		
-		for (int i = 0; i<_largoTablero; i++)
-		{
-			
-			if(_totalCasillasNegras / 2 <  _casillasNegrasDisponibles)
-			{
-				_maximo = 4; _minimo = 1;
-			}
-			
-			else _maximo = 2; _minimo = 1;
-			
-			int _resto = rellenarTablero(tablero[_patronAleatorio[i]], _totalCasillasNegras, _maximo, _minimo, random);
-			
-			_casillasNegrasDisponibles -= _resto;
-				
-			
-		}
-		
-		imprimirMatriz(tablero);
 
+	public static void generarJuego(int largoDelTablero)
+	{
+		int[][] tablero = generarTablero(largoDelTablero);
+		
+//		int [][] referenciasCol = generarReferenciasCol(tablero);
+//		
+//		int [][] referenciasFila = generarReferenciasFila(tablero);
+		
+		
 	}
 	
-	private static int rellenarTablero(int[] fila, int casillasNegrasDisponibles, int maximo, int minimo, Random rand)
+	
+	private static int[][] generarTablero(int largoDelTablero)
 	{	
 		
-		int _cantNegras = rand.nextBoolean() ? maximo : minimo;
+		int[][] tablero = new int[largoDelTablero][largoDelTablero];
 		
-		System.out.println(_cantNegras);
+		int[] patronDeFilasAleatorio = randomSinRepetir(largoDelTablero);
 		
-		ArrayList<Integer> _posicionesDisponibles = new ArrayList<>();
+		int totalCasillasNegras = conseguirTotalCasillasNegras(largoDelTablero);
 		
-		for (int i = 0; i < fila.length; i++) 
+		rellenarTablero(tablero, totalCasillasNegras, largoDelTablero, patronDeFilasAleatorio);
+		
+		imprimirMatriz(tablero);
+		
+		return tablero;
+	}
+	
+	
+	private static void rellenarTablero(int[][] tablero, int totalCasillasNegras, int cantidadDeFilas, int[] patronAleatorio)
+	{
+		
+		int casillasNegrasDisponibles = totalCasillasNegras;
+		
+		int maximo = 0;
+		int minimo = 0;
+		
+		for (int i = 0; i<cantidadDeFilas; i++)
 		{
-		    _posicionesDisponibles.add(i);
+			 //Repensar el nombre
+			if(nosPasamosDeLaMitad(totalCasillasNegras, casillasNegrasDisponibles))
+			{	
+				maximo = 4; minimo = 1;
+			}
+			else maximo = 2; minimo = 1;
+			
+			int[] filaActual = tablero[patronAleatorio[i]];
+			
+			casillasNegrasDisponibles -= rellenarFilasYActualizar(filaActual, casillasNegrasDisponibles, maximo, minimo);
+			
 		}
-
-		// Elegir N posiciones aleatoriamente
-		for (int i = 0; i < _cantNegras; i++) 
-		{
-		    int _indiceAleatorio = rand.nextInt(_posicionesDisponibles.size());
-		    int _posicionElegida = _posicionesDisponibles.remove(_indiceAleatorio);
-		    fila[_posicionElegida] = 1;
-		}	
 		
-		return _cantNegras;
+	}
+	
+	private static boolean nosPasamosDeLaMitad(int totalCasillasNegras, int casillasNegrasDisponibles)
+	{
+		return (totalCasillasNegras / 2 < casillasNegrasDisponibles);
+	}
+	
+	private static int rellenarFilasYActualizar(int[] fila, int casillasNegrasDisponibles, int maximo, int minimo)
+	{	
+		
+		int cantidadCeldasNegrasEnFila = conseguirMaximoMinimo(maximo, minimo);
+
+		System.out.println(cantidadCeldasNegrasEnFila);
+		
+		ArrayList<Integer> posicionesDisponibles = new ArrayList<>();
+		
+		int largoFila = fila.length;
+		
+		agregarIndices(largoFila, posicionesDisponibles);
+
+		for (int i = 0; i < largoFila; i++) 
+		{
+		    int indiceAleatorio = randomEnRango(posicionesDisponibles.size());
+		    
+		    int posicionElegida = indiceAleatorio;
+		    
+		    fila[posicionElegida] = 1;
+		    
+		    posicionesDisponibles.remove(indiceAleatorio);
+		    
+		}	
+		return cantidadCeldasNegrasEnFila;
 	}
 
-	private static int[] randomSinRepetir(int largoDeMatriz)
+	private static int conseguirMaximoMinimo(int max, int min)
+	{
+		Random aleatorio = new Random();
+		
+		return aleatorio.nextBoolean() ? max : min;
+		
+	}
+	
+	private static int[] randomSinRepetir(int rango)
 	{		
 		ArrayList<Integer> _indicesDisponibles = new ArrayList<Integer>();
-	
-		int[] _patronAleatorio = new int[largoDeMatriz];
 		
-		for (int i = 0; i<largoDeMatriz; i++)
-		{
-			_indicesDisponibles.add((Integer)(i));
-		}
+		agregarIndices(rango, _indicesDisponibles);
 		
 		System.out.println(_indicesDisponibles);
 		
-		Random _random = new Random();
-		
-		int _posicionActual = 0;
-		
-		while (_indicesDisponibles.size() != 0)
-		{
-			int _indexAleatorio = _random.nextInt(_indicesDisponibles.size());
-			
-			int _elementoSeleccionado = _indicesDisponibles.get(_indexAleatorio);
-			
-		    _patronAleatorio[_posicionActual] = _elementoSeleccionado;
-			
-			_indicesDisponibles.remove(_indexAleatorio);
-			
-			System.out.println(_indicesDisponibles);
-			
-			_posicionActual ++;
-		}
+	    int[] _patronAleatorio = generarPatronAleario(_indicesDisponibles);
 		
 	    return _patronAleatorio;
     }
+	
+	private static void agregarIndices(int rango, ArrayList<Integer> listaDeIndices)
+	{
+	    for (int i = 0; i<rango; i++)
+		{
+			listaDeIndices.add(convertirorAInteger(i));
+		}
+	}
+	
+	private static Integer convertirorAInteger(int valor)
+	{
+	    return (Integer)(valor); 
+	}
+	
+	private static int[] generarPatronAleario(ArrayList<Integer> indicesDisponibles)
+    {
+		
+		int cantidadDeIndices = indicesDisponibles.size();
+		
+		int[] patronAleatorio = new int[cantidadDeIndices];
+		
+		int posicionActual = 0;
+		
+		while (!(indicesDisponibles.isEmpty()))
+		{
+			
+			int indiceAleatorio = randomEnRango(cantidadDeIndices);
+			
+		    patronAleatorio[posicionActual] = indicesDisponibles.get(indiceAleatorio);
+			
+			indicesDisponibles.remove(indiceAleatorio);
+			
+			cantidadDeIndices --;
+			
+			posicionActual ++;
+		}
+		
+		return patronAleatorio;
+    }
+	
+	private static int randomEnRango(int rango)
+	{
+		Random aleatorio = new Random();
+		
+		return aleatorio.nextInt(rango);
+	}
+	
+	private static int conseguirTotalCasillasNegras(int largoDelTablero)
+	{
+	    float porcentajeDeNegrasDelTablero = 0.5f;
+	    
+	    int totalCasillasDelTablero = largoDelTablero * largoDelTablero;
+	    
+	    int retorno = Math.round(totalCasillasDelTablero * porcentajeDeNegrasDelTablero);
+	    
+	    return retorno;
+	}
 	
 	public static void imprimirMatriz(int[][] mat)
 	{
@@ -125,24 +191,6 @@ public class Tablero {
 		    }
 		    System.out.println();
 		}
-		
-	}
-	
-	private void validarTablero(int[][] tablero)
-	{
-		
-	}
-	
-	public boolean corregirRespuesta(int [][] respuesta)
-	{
-		if(respuestaCorrecta(respuesta)) return true;
-		
-		return false;
-	}
-	
-	private boolean respuestaCorrecta(int [][] respuesta)
-	{
-		return true;
 	}
 	
 	
