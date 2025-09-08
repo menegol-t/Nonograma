@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -58,6 +60,7 @@ public class VistaJuego {
 	 */
 	private void initialize() {
 		Color colorFondo2 = new Color(31, 43, 52, 200);
+		int[][] pistasFila = { { 2, 0, 2 }, { 0, 4, 0 }, { 0, 0, 1 }, { 0, 0, 2 }, { 0, 0, 2 }, };
 
 		frame = new JFrame("TP1 P3 UNGS - NONOGRAMA");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,18 +77,86 @@ public class VistaJuego {
 		frame.getContentPane().add(grilla);
 
 		JPanel panelPistasVerticales = new JPanel();
-		panelPistasVerticales.setBounds(200, 80, 300, 60);
+		panelPistasVerticales.setBounds(200, 60, 300, 80);
 		panelPistasVerticales.setBackground(colorFondo2);
+		panelPistasVerticales.setLayout(new GridLayout(1, 5, 5, 5));
+		panelPistasVerticales.setBorder(new EmptyBorder(5, 5, 5, 5));
 		frame.getContentPane().add(panelPistasVerticales);
 
+		for (int i = 0; i < 5; i++) {
+			JPanel panelP = new JPanel();
+			panelP.setLayout(new GridLayout(3, 1, 5, 5));
+			panelP.setBackground(new Color(0, 255, 0, 80));
+
+			panelPistasVerticales.add(panelP);
+
+		  // junto los valores distintos de 0
+	    List<String> valores = new ArrayList<>();
+	    for (int j = 0; j < 3; j++) {
+	        if (pistasFila[i][j] != 0) {
+	            valores.add(Integer.toString(pistasFila[i][j]));
+	        }
+	    }
+
+	    // Relleno con "" hasta llegar a 3 valores
+	    while (valores.size() < 3) {
+	        valores.add("");
+	    }
+
+	    // Inserto los valores en el panel
+	    for (int j = valores.size() - 1; j >= 0; j--) {
+	        JLabel lblPista = new JLabel(valores.get(j));
+	        lblPista.setFont(new Font("Segoe UI", Font.BOLD, 14));
+	        lblPista.setHorizontalAlignment(SwingConstants.CENTER);
+	        lblPista.setForeground(new Color(245, 245, 245));
+	        panelP.add(lblPista);
+	    }
+		}
+
 		JPanel panelPistasHorizontales = new JPanel();
-		panelPistasHorizontales.setBounds(130, 150, 60, 300);
+		panelPistasHorizontales.setBounds(110, 150, 80, 300);
 		panelPistasHorizontales.setBackground(colorFondo2);
+		panelPistasHorizontales.setLayout(new GridLayout(5, 1, 5, 5));
+		panelPistasHorizontales.setBorder(new EmptyBorder(5, 5, 5, 5));
 		frame.getContentPane().add(panelPistasHorizontales);
 
+		for (int i = 0; i < 5; i++) {
+			JPanel panelP = new JPanel();
+			panelP.setLayout(new GridLayout(1, 3, 5, 5));
+			panelP.setBackground(new Color(0, 255, 0, 80));
+
+			panelPistasHorizontales.add(panelP);
+
+		  // junto los valores distintos de 0
+	    List<String> valores = new ArrayList<>();
+	    for (int j = 0; j < 3; j++) {
+	        if (pistasFila[i][j] != 0) {
+	            valores.add(Integer.toString(pistasFila[i][j]));
+	        }
+	    }
+
+	    // Relleno con "" hasta llegar a 3 valores
+	    while (valores.size() < 3) {
+	        valores.add("");
+	    }
+
+	    // Inserto los valores en el panel
+	    for (int j = valores.size() - 1; j >= 0; j--) {
+	        JLabel lblPista = new JLabel(valores.get(j));
+	        lblPista.setFont(new Font("Segoe UI", Font.BOLD, 14));
+	        lblPista.setHorizontalAlignment(SwingConstants.CENTER);
+	        lblPista.setForeground(new Color(245, 245, 245));
+	        panelP.add(lblPista);
+	    }
+		}		
+		
+		
+		
+		/**************************************************/
 		JButton btnPista = new JButton("Dame Una Pista");
 		btnPista.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		btnPista.setBounds(200, 461, 300, 33);
+		
 		frame.getContentPane().add(btnPista);
 
 		btnPista.addMouseListener(new MouseAdapter() {
@@ -116,7 +187,7 @@ public class VistaJuego {
 		JLabel lblNewLabel = new JLabel("NONOGRAMA");
 		lblNewLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(130, 11, 370, 46);
+		lblNewLabel.setBounds(110, 11, 390, 46);
 		frame.getContentPane().add(lblNewLabel);
 
 		for (int fila = 0; fila < 5; fila++) {

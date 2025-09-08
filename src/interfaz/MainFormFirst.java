@@ -1,23 +1,20 @@
 package interfaz;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
 
-import javax.swing.JFrame;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-
-import java.awt.BorderLayout;
-import java.awt.Component;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Color;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
+import logica.Tablero;
 
 public class MainFormFirst {
 
@@ -51,9 +48,12 @@ public class MainFormFirst {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+	
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		
 		
 		JLabel tituloPrincipal = new JLabel("Nanograma - Programación III",  SwingConstants.CENTER);
 		tituloPrincipal.setFont(new Font("SansSerif", Font.BOLD,24));
