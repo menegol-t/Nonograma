@@ -16,6 +16,10 @@ import javax.swing.SwingConstants;
 
 import logica.Tablero;
 
+import javax.swing.UIManager;
+import com.formdev.flatlaf.FlatDarkLaf;
+
+
 public class MainFormFirst {
 
 	private JFrame frame;
@@ -25,18 +29,18 @@ public class MainFormFirst {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainFormFirst window = new MainFormFirst();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+        EventQueue.invokeLater(() -> {
+            try {
+                // Setear el Look & Feel una sola vez ANTES de crear la UI
+                FlatDarkLaf.setup();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
+            MainFormFirst window = new MainFormFirst();
+            window.frame.setVisible(true);
+        });
+    }
 	/**
 	 * Create the application.
 	 */

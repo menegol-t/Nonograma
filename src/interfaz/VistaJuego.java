@@ -20,6 +20,9 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import com.formdev.flatlaf.FlatDarkLaf; 
+
+
 public class VistaJuego {
 
 	private JFrame frame;
@@ -29,29 +32,24 @@ public class VistaJuego {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VistaJuego window = new VistaJuego();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+        EventQueue.invokeLater(() -> {
+            try { FlatDarkLaf.setup(); } catch (Exception e) { e.printStackTrace(); } 
+            try {
+                VistaJuego window = new VistaJuego();
+                window.frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
 
 	/**
 	 * Create the application.
 	 */
 	public VistaJuego() {
 
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+	
 		initialize();
 	}
 
