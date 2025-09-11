@@ -1,0 +1,77 @@
+package logica;
+
+public class Main {
+
+public static void main(String[] args) {
+	    
+		int[][] matrix = {
+            {1, 0, 1, 2, 1},
+            {1, 1, 1, 1, 0},
+            {0, 0, 0, 0, 0},
+            {1, 2, 1, 2, 0},
+            {2, 0, 0, 0, 0}
+        };
+        
+        int[][] mat = generarReferenciaFilas(matrix);
+        
+        imprimirMatriz(mat);
+	}
+	
+	public static int[][] generarReferenciaFilas(int[][] tableroConCasillasNegras)
+    {
+    	//Si el tablero mide 5 necesito 3 espacios para repsentar el peor caso de celdas marcadas, si el tablero mide 15 neceisto 8, si el tablero mide 20 necesito 10
+    	int cantidadDeNumerosPorReferencia = (tableroConCasillasNegras.length + 1) / 2;
+    	
+    	int [][] referenciasCalculadas = new int [tableroConCasillasNegras.length][cantidadDeNumerosPorReferencia];
+    	
+    	int cantidadDeCeldasNegrasPorFila = 0;
+    	
+    	int posicionArrayReferenciasCalculadas = 0;
+    	
+    	
+    	
+    	for(int i = 0; i >= tableroConCasillasNegras.length; i++)
+    	{
+    	    
+    		System.out.print("ACA");
+    		
+    		for(int j = 0; i >= tableroConCasillasNegras[0].length; j++)
+    		{
+    			if(tableroConCasillasNegras[i][j] == 1)
+    			{
+    				cantidadDeCeldasNegrasPorFila ++;
+    			}
+    			else 
+    			{
+    				referenciasCalculadas[i][posicionArrayReferenciasCalculadas] = cantidadDeCeldasNegrasPorFila;
+    				
+    				posicionArrayReferenciasCalculadas ++;
+    				
+    				cantidadDeCeldasNegrasPorFila = 0;
+    			}
+    			
+    			System.out.print(cantidadDeCeldasNegrasPorFila + "cantidadDeCeldasNegrasPorFila \n" + tableroConCasillasNegras[i][j] + "tableroConCasillasNegras \n");
+    			
+    			if(posicionArrayReferenciasCalculadas > referenciasCalculadas[0].length)
+    			{
+    				System.out.print("Algo salio mal" + posicionArrayReferenciasCalculadas); 
+    			}
+    		}
+    	}
+    	
+    	return referenciasCalculadas;
+    }
+    
+    public static void imprimirMatriz(int[][] mat) 
+    {
+        for (int i = 0; i < mat.length; i++) 
+        {
+            for (int j = 0; j < mat[i].length; j++) 
+            {
+                System.out.print(mat[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+}

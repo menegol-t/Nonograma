@@ -1,0 +1,100 @@
+package logica;
+
+public class Main
+{
+	public static void main(String[] args) {
+	    
+		int[][] matrix = {
+            {1, 0, 1, 0, 1},
+            {1, 1, 1, 1, 0},
+            {0, 0, 0, 0, 0},
+            {1, 0, 0, 0, 1},
+            {1, 1, 0, 1, 0}
+        };
+        
+        int[][] mat = generarReferenciaFilas(matrix);
+        
+        imprimirMatriz(mat);
+	}
+	
+	public static int[][] generarReferenciaFilas(int[][] tableroConCasillasNegras)
+	{
+	    //Si el tablero mide 5 necesito 3 espacios para repsentar el peor caso de celdas marcadas, si el tablero mide 15 neceisto 8, si el tablero mide 20 necesito 10
+	    int cantidadDeNumerosPorReferencia = (tableroConCasillasNegras.length + 1) / 2;
+	    
+	    //Lista 5*3 donde guardo las referencias 
+	    int [][] referenciasCalculadas = new int [tableroConCasillasNegras.length][cantidadDeNumerosPorReferencia];
+	    
+	    //Acum de celdas marcadas
+	    int acumuladorDeCeldasNegrasPorFila = 0;
+	    
+	    //Me ayuda a cortar el acumulador de celdas marcadas por fila paar las referencias. Por ej si tengo en el tablero [1,1,0,0,1], esto me ayuda a que la referencia sea [2,1] en lugar de [3]
+	    boolean anteriorFueCeldaNegra;
+	    
+	    //Indice dentro del array de referencia por fila
+	    int posicionArrayReferenciasCalculadas = 0;
+	    
+	    //Recorro todas las filas
+	    for(int i = 0; i <= tableroConCasillasNegras.length - 1; i++)
+	    {
+	        
+	        anteriorFueCeldaNegra = false;
+	        
+	        posicionArrayReferenciasCalculadas = 0;
+	        
+	        acumuladorDeCeldasNegrasPorFila = 0;
+	        
+	        //Dentro de cada fila, recorro todas sus celdas buscando las celdas negras marcadas con 1
+	        for(int j = 0; j <= tableroConCasillasNegras[0].length - 1; j++)
+	        {
+	        	//Si encontre una celda con una casilla negra, aumento el acumulador
+	            if(tableroConCasillasNegras[i][j] == 1)
+	            {
+	            	//Acumulo la cantidad de celdas negras que llevo seguidas, por ej [1,1,1,1,0] voy acumulando 4.
+	                acumuladorDeCeldasNegrasPorFila ++;
+	                
+	                //Me ayuda a despues a decidir si cortar el acumulador o no, por ejem
+	                anteriorFueCeldaNegra = true;
+	            }
+	            //En cualquier otro caso, guardo el acumulador el array donde me indique el indice, aumento el indice, y reinicio el acumulador
+	            else 
+	            {
+	                if(anteriorFueCeldaNegra)
+	                {
+	                	/*
+	                	 *Me paro en referenciasCalculadas[fila del tablero a la que corresponde al referencia][posicion de la referencia (si el array es de 5*3, esta puede ser 0, 1 o 2)] 
+	                	 * */
+	                    referenciasCalculadas[i][posicionArrayReferenciasCalculadas] = acumuladorDeCeldasNegrasPorFila;
+	                
+	                    acumuladorDeCeldasNegrasPorFila = 0;
+	                
+	                    posicionArrayReferenciasCalculadas ++;
+	                }
+	                
+	                anteriorFueCeldaNegra = false;
+	            }
+	            
+	        }
+	        
+	        if(anteriorFueCeldaNegra)
+	        {
+	            referenciasCalculadas[i][posicionArrayReferenciasCalculadas] = acumuladorDeCeldasNegrasPorFila;
+	        }
+	    }
+	    
+	    return referenciasCalculadas;
+	}
+
+    
+    public static void imprimirMatriz(int[][] mat) 
+    {
+        for (int i = 0; i < mat.length; i++) 
+        {
+            for (int j = 0; j < mat[i].length; j++) 
+            {
+                System.out.print(mat[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}

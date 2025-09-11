@@ -1,0 +1,68 @@
+package logica;
+
+public class Main
+{
+	public static void main(String[] args) {
+		int[][] matrix = {
+	      {1, 0, 1, 0, 1},
+	      {1, 1, 1, 1, 0},
+	      {0, 0, 0, 0, 0},
+	      {1, 0, 0, 0, 1},
+	      {1, 0, 0, 1, 1}
+		};
+  
+		int[][] mat = generarReferenciaFilas(matrix);
+  
+		imprimirMatriz(mat);
+
+	}
+
+	public static int[][] generarReferenciaFilas(int[][] tableroConCasillasNegras) 
+	{
+		int maxReferenciasPorFila = (tableroConCasillasNegras.length + 1) / 2;
+	    
+	    int[][] referenciasCalculadas = new int[tableroConCasillasNegras.length][maxReferenciasPorFila];
+
+	    for (int i = 0; i < tableroConCasillasNegras.length; i++) 
+	    {
+	        int acumCeldasNegrasPorFila = 0, indiceReferenciasCalculadas = 0;
+	        
+	        boolean celdaAnteriorFueNegra = false;
+
+	        for (int j = 0; j < tableroConCasillasNegras[i].length; j++) 
+	        {	
+	            if (tableroConCasillasNegras[i][j] == 1) 
+	            {
+	            	acumCeldasNegrasPorFila++;
+	            	
+	            	celdaAnteriorFueNegra = true;
+	            }
+	            else if (celdaAnteriorFueNegra) 
+	            {
+	            	indiceReferenciasCalculadas++;
+	            	
+	            	referenciasCalculadas[i][indiceReferenciasCalculadas] = acumCeldasNegrasPorFila;
+	                
+	                acumCeldasNegrasPorFila = 0;
+	                
+	                celdaAnteriorFueNegra = false;
+	            }
+	        }
+
+	        if (celdaAnteriorFueNegra) referenciasCalculadas[i][indiceReferenciasCalculadas] = acumCeldasNegrasPorFila;
+	    }
+	    return referenciasCalculadas;
+	}
+
+	public static void imprimirMatriz(int[][] mat) 
+    {
+        for (int i = 0; i < mat.length; i++) 
+        {
+            for (int j = 0; j < mat[i].length; j++) 
+            {
+                System.out.print(mat[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}

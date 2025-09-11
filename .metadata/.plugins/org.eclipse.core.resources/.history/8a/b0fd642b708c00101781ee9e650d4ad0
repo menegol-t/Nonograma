@@ -1,0 +1,126 @@
+package logica;
+
+public class Main
+{
+	public static void main(String[] args) {
+	    
+		int[][] matrix = {
+            {1, 0, 1, 0, 1},
+            {1, 1, 1, 1, 0},
+            {0, 0, 0, 0, 0},
+            {1, 0, 0, 0, 1},
+            {1, 1, 0, 1, 0}
+        };
+        
+        int[][] mat = generarReferenciaFilas(matrix);
+        
+        imprimirMatriz(mat);
+	}
+	
+	/*
+     * Toma como input un tablero con casillas negras. Es decir, una matriz cuadrada (originalmente de 5*5, pero escalable) de ints con valores:
+     * 0 Blanca
+     * 1 Negra/marcada
+     * 2 X roja
+     *  
+     *  Retorna una matriz con las referencias para las filas del tablero, contemplando el peor caso de referencias salteadas. 
+     *  Es decir, en mi tablero con filas de 5 podria tener una fila con [1,0,1,0,1], entonces mi referencia no deberia ser 
+     *  el numero 3, si no que deberia ser "1 1 1". Poder representar estos 1's, requiero un array de 3 espacios. 
+     *  La funcion calcula el peor caso de referencias salteadas y devuelve una matriz con el numero de referencias como:
+     *  Matriz:
+     *  {1, 0, 1, 0, 1},
+        {1, 1, 1, 1, 0},
+        {0, 0, 0, 0, 0},
+        {1, 0, 0, 0, 1},
+        {1, 1, 0, 1, 0}
+       	Referencia de filas:
+       	{1,1,1},
+       	{4,0,0},
+       	{0,0,0},
+       	{1,1,0},
+       	{2,1,0}
+     */
+	public static int[][] generarReferenciaFilas(int[][] tableroConCasillasNegras)
+	{
+	    //Si el tablero mide 5 necesito 3 espacios para repsentar el peor caso de celdas marcadas, si el tablero mide 15 neceisto 8, si el tablero mide 20 necesito 10
+	    int cantidadDeNumerosPorReferencia = (tableroConCasillasNegras.length + 1) / 2;
+	    
+	    //Lista 5*3 donde guardo las referencias 
+	    int [][] referenciasCalculadas = new int [tableroConCasillasNegras.length][cantidadDeNumerosPorReferencia];
+	    
+	    //Acum de celdas marcadas
+	    int acumuladorDeCeldasNegrasPorFila = 0;
+	    
+	    //Me ayuda a cortar el acumulador de celdas marcadas por fila paar las referencias. Por ej si tengo en el tablero [1,1,0,0,1], esto me ayuda a que la referencia sea [2,1] en lugar de [3]
+	    boolean anteriorFueCeldaNegra;
+	    
+	    //Indice dentro del array de referencia por fila
+	    int posicionArrayReferenciasCalculadas = 0;
+	    
+	    //Recorro todas las filas
+	    for(int i = 0; i <= tableroConCasillasNegras.length - 1; i++)
+	    {
+	        
+	        anteriorFueCeldaNegra = false;
+	        
+	        posicionArrayReferenciasCalculadas = 0;
+	        
+	        acumuladorDeCeldasNegrasPorFila = 0;
+	        
+	        //Dentro de cada fila, recorro todas sus celdas buscando aquellas con "1" (es decir, marcadas)
+	        for(int j = 0; j <= tableroConCasillasNegras[0].length - 1; j++)
+	        {
+	        	//Si encontre una celda con una casilla negra, aumento el acumulador
+	            if(tableroConCasillasNegras[i][j] == 1)
+	            {
+	            	//Acumulo la cantidad de celdas negras que llevo seguidas, por ej [1,1,1,1,0] voy acumulando 4.
+	                acumuladorDeCeldasNegrasPorFila ++;
+	                
+	                //Me ayuda a despues a decidir si cortar el acumulador o no, por ejemplo [1,0,1,0,1] deberia darme la referencia [1,1,1], no [3]
+	                anteriorFueCeldaNegra = true;
+	            }
+	            
+	            //Si la celda actual no es negra
+	            else 
+	            {
+	            	//y ademas la celda anterior SI FUE NEGRA, es decir, si tengo 2 celdas blancas seguidas y esta es la segunda, lo siguiente no se ejecuta 
+	                if(anteriorFueCeldaNegra)
+	                {
+	                	//Si la celda anterior fue negra, y esta ya no, guardo lo que el acumulador guardo desde la iteracion anterior
+	                    referenciasCalculadas[i][posicionArrayReferenciasCalculadas] = acumuladorDeCeldasNegrasPorFila;
+	                
+	                    //Una vez guardado, como esta celda no es negra, corto el acumulador reiniciandolo. Si tengo la fila [1,1,0,1], esto se da cuando me paro en "0". En la linea anterior guardé el acumulador cuando estaba acumuladndo "2"
+	                    acumuladorDeCeldasNegrasPorFila = 0;
+	                
+	                    //Con el acumulador cortado, preparo para que la siguiente referencia se guarde en el proximo indice del array de referencias por fila []
+	                    posicionArrayReferenciasCalculadas ++;
+	                }
+	                
+	                anteriorFueCeldaNegra = false;
+	            }
+	            
+	        }
+	        
+	        //Lo de arriba solo guarda el acumulador en la referencia si 
+	        if(anteriorFueCeldaNegra)
+	        {
+	            referenciasCalculadas[i][posicionArrayReferenciasCalculadas] = acumuladorDeCeldasNegrasPorFila;
+	        }
+	    }
+	    
+	    return referenciasCalculadas;
+	}
+
+    
+    public static void imprimirMatriz(int[][] mat) 
+    {
+        for (int i = 0; i < mat.length; i++) 
+        {
+            for (int j = 0; j < mat[i].length; j++) 
+            {
+                System.out.print(mat[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}

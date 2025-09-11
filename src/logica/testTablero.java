@@ -4,7 +4,7 @@ public class testTablero {
 
 	public static void main(String[] args) {
 		
-		Tablero tableroTest = Tablero.generarJuego(5);
+		TableroDemo tableroTest = TableroDemo.generarJuego(5);
 		
 		tableroTest.toString();
 		

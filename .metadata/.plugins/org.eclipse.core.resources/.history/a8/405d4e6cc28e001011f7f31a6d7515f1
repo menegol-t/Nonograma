@@ -1,0 +1,259 @@
+package logica;
+import java.util.ArrayList;
+import java.util.Random;
+
+public class Tablero {
+
+    private int[][]  _tablero;
+    private int[][]  _referenciasCol;
+    private int[][]  _referenciasFila;
+
+
+    private static final Random RANDOM = new Random();
+
+    private Tablero(int[][] tablero, int[][]referenciasCol, int[][] referenciasFila) 
+    {
+        _tablero = tablero;
+        
+        _referenciasCol = referenciasCol;
+        
+        _referenciasFila = referenciasFila;
+    }
+
+    public static Tablero generarJuego(int largoDelTablero)
+    {
+        int[][] tablero = generarTablero(largoDelTablero);
+        
+        int [][] rleferenciasCol = new int[largoDelTablero][3];
+        
+        int [][] referenciasFila = new int[largoDelTablero][3];
+        
+        return new Tablero(tablero, rleferenciasCol, referenciasFila);
+    }
+
+    
+    /*
+     * Toma como input un tablero con casillas negras. Es decir, una matriz cuadrada (originalmente de 5*5, pero escalable) de ints con valores:
+     * 0 Blanca
+     * 1 Negra/marcada
+     * 2 X roja
+     *  
+     *  Retorna una matriz con las referencias para las filas del tablero, contemplando el peor caso de referencias salteadas. 
+     *  Es decir, en mi tablero con filas de 5 podria tener una fila con [1,0,1,0,1], entonces mi referencia no deberia ser 
+     *  el numero 3, si no que deberia ser "1 1 1". Poder representar estos 1's, requiero un array de 3 espacios. 
+     *  La funcion calcula el peor caso de referencias salteadas y devuelve una matriz con el numero de referencias como:
+     *  Matriz:
+     *  {1, 0, 1, 0, 1},
+        {1, 1, 1, 1, 0},
+        {0, 0, 0, 0, 0},
+        {1, 0, 0, 0, 1},
+        {1, 1, 0, 1, 0}
+       	Referencia de filas:
+       	{1,1,1},
+       	{4,0,0},
+       	{0,0,0},
+       	{1,1,0},
+       	{2,1,0}
+     */
+	public static int[][] generarReferenciaFilas(int[][] tableroConCasillasNegras)
+	{
+	    //Si el tablero mide 5 necesito 3 espacios para repsentar el peor caso de celdas marcadas, si el tablero mide 15 neceisto 8, si el tablero mide 20 necesito 10
+	    int maxReferenciasPorFila = (tableroConCasillasNegras.length + 1) / 2;
+	    
+	    //Lista 5*3 donde guardo las referencias 
+	    int [][] referenciasCalculadas = new int [tableroConCasillasNegras.length][maxReferenciasPorFila];
+	    
+	    //Recorro todas las filas
+	    for(int i = 0; i <= tableroConCasillasNegras.length - 1; i++)
+	    {
+	        
+	        boolean celdaAnteriorFueNegra = false;
+	        
+	        int  acumuladorCeldasNegrasPorFila = 0, indiceReferenciasCalculadas = 0;
+	        
+	        //Dentro de cada fila, recorro todas sus celdas buscando aquellas con "1" (es decir, marcadas)
+	        for(int j = 0; j <= tableroConCasillasNegras[0].length - 1; j++)
+	        {
+	        	//Si encontre una celda con una casilla negra, aumento el acumulador
+	            if(tableroConCasillasNegras[i][j] == 1)
+	            {
+	            	//Acumulo la cantidad de celdas negras que llevo seguidas, por ej [1,1,1,1,0] voy acumulando 4.
+	            	acumuladorCeldasNegrasPorFila ++;
+	                
+	                //Me ayuda a despues a decidir si cortar el acumulador o no, por ejemplo [1,0,1,0,1] deberia darme la referencia [1,1,1], no [3]
+	            	celdaAnteriorFueNegra = true;
+	            }
+	            
+	            //Si la celda actual no es negra
+	            else 
+	            {
+	            	//y ademas la celda anterior SI FUE NEGRA, es decir, si tengo 2 celdas blancas seguidas y esta es la segunda, lo siguiente no se ejecuta 
+	                if(celdaAnteriorFueNegra)
+	                {
+	                	//Si la celda anterior fue negra, y esta ya no, guardo lo que el acumulador guardo desde la iteracion anterior
+	                    referenciasCalculadas[i][indiceReferenciasCalculadas] = acumuladorCeldasNegrasPorFila;
+	                
+	                    //Una vez guardado, como esta celda no es negra, corto el acumulador reiniciandolo. Si tengo la fila [1,1,0,1], esto se da cuando me paro en "0". En la linea anterior guardé el acumulador cuando estaba acumuladndo "2"
+	                    acumuladorCeldasNegrasPorFila = 0;
+	                
+	                    //Con el acumulador cortado, preparo para que la siguiente referencia se guarde en el proximo indice del array de referencias por fila []
+	                    indiceReferenciasCalculadas ++;
+	                }
+	                
+	                celdaAnteriorFueNegra = false;
+	            }
+	            
+	        }
+	        
+	        /*
+	         * Lo de arriba solo guarda el acumulador en la referencia si la celda anterior no fue "1", es decir si se da que [1,1,0]. 
+	         * Si justo la ultima celda esta marcada, es decir [1,0,1], no se guarda el ultimo 1. Para eso esta este if. Una vez
+	         * finalice de recorrer la fila, si la anterior fue negra, guardo ese acumulador.
+	         */
+	        if(anteriorFueCeldaNegra)
+	        {
+	            referenciasCalculadas[i][posicionArrayReferenciasCalculadas] = acumuladorDeCeldasNegrasPorFila;
+	        }
+	    }
+	    
+	    return referenciasCalculadas;
+	}
+    
+    private static int[][] generarTablero(int largoDelTablero) 
+    {
+        int[][] tablero = new int[largoDelTablero][largoDelTablero];
+        
+        int[] patronDeFilasAleatorio = randomSinRepetir(largoDelTablero);
+        
+        int totalCasillasNegras = conseguirTotalCasillasNegras(largoDelTablero);
+        
+        rellenarTablero(tablero, totalCasillasNegras, largoDelTablero, patronDeFilasAleatorio);
+        
+        return tablero;
+    }
+
+    private static void rellenarTablero(int[][] tablero, int totalCasillasNegras, int cantidadDeFilas, int[] patronAleatorio) 
+    {
+        int casillasNegrasDisponibles = totalCasillasNegras;
+        
+        for (int i = 0; i<cantidadDeFilas; i++) 
+        {
+            int maximo, minimo;
+            
+            if (nosPasamosDeLaMitad(totalCasillasNegras, casillasNegrasDisponibles)) 
+            {	
+                maximo = 4; minimo = 3;
+            } else {
+                maximo = 2; minimo = 1;
+            }
+            int[] filaActual = tablero[patronAleatorio[i]];
+            
+            casillasNegrasDisponibles -= rellenarFilasYActualizar(filaActual, casillasNegrasDisponibles, maximo, minimo);
+        }
+    }
+
+    private static boolean nosPasamosDeLaMitad(int totalCasillasNegras, int casillasNegrasDisponibles) 
+    {
+        return (totalCasillasNegras / 2 < casillasNegrasDisponibles);
+    }
+
+    private static int rellenarFilasYActualizar(int[] fila, int casillasNegrasDisponibles, int maximo, int minimo) 
+    {	
+        int cantidadCeldasNegrasEnFila = conseguirMaximoMinimo(maximo, minimo);
+        
+        ArrayList<Integer> posicionesDisponibles = new ArrayList<>();
+        
+        int largoFila = fila.length;
+        
+        agregarIndices(largoFila, posicionesDisponibles);
+
+        for (int i = 0; i < cantidadCeldasNegrasEnFila; i++) 
+        {
+            int indiceAleatorio = randomEnRango(posicionesDisponibles.size());
+            
+            int posicionElegida = posicionesDisponibles.get(indiceAleatorio);
+            
+            fila[posicionElegida] = 1;
+            
+            posicionesDisponibles.remove(indiceAleatorio);
+        }	
+        return cantidadCeldasNegrasEnFila;
+    }
+
+    private static int conseguirMaximoMinimo(int max, int min) 
+    {
+        return RANDOM.nextBoolean() ? max : min; 
+    }
+
+    private static int[] randomSinRepetir(int rango) 
+    {		
+        ArrayList<Integer> indicesDisponibles = new ArrayList<>();
+        
+        agregarIndices(rango, indicesDisponibles);
+        
+        return generarPatronAleario(indicesDisponibles);
+    }
+
+    private static void agregarIndices(int rango, ArrayList<Integer> listaDeIndices) 
+    {
+        for (int i = 0; i<rango; i++) 
+        {
+            listaDeIndices.add(i);
+        }
+    }
+
+    private static int[] generarPatronAleario(ArrayList<Integer> indicesDisponibles) 
+    {
+        int cantidadDeIndices = indicesDisponibles.size();
+        
+        int[] patronAleatorio = new int[cantidadDeIndices];
+        
+        int posicionActual = 0;
+        
+        while (!(indicesDisponibles.isEmpty())) 
+        {
+            int indiceAleatorio = randomEnRango(cantidadDeIndices);
+            
+            patronAleatorio[posicionActual] = indicesDisponibles.get(indiceAleatorio);
+            
+            indicesDisponibles.remove(indiceAleatorio);
+            
+            cantidadDeIndices --;
+            
+            posicionActual ++;
+        }
+        return patronAleatorio;
+    }
+
+    private static int randomEnRango(int rango) 
+    {
+        return RANDOM.nextInt(rango);
+    }
+
+    private static int conseguirTotalCasillasNegras(int largoDelTablero) 
+    {
+        float porcentajeDeNegrasDelTablero = 0.5f;
+        
+        int totalCasillasDelTablero = largoDelTablero * largoDelTablero;
+        
+        return Math.round(totalCasillasDelTablero * porcentajeDeNegrasDelTablero);
+    }
+
+    public static void imprimirMatriz(int[][] mat) 
+    {
+        for (int i = 0; i < mat.length; i++) 
+        {
+            for (int j = 0; j < mat[i].length; j++) 
+            {
+                System.out.print(mat[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public String toString() 
+    {
+        imprimirMatriz(_tablero);
+        return null;
+    }
+}

@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import logica.Tablero;
+import logica.TableroDemo;
 
 import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatDarkLaf;

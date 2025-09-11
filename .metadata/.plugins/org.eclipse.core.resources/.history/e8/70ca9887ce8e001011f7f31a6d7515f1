@@ -1,0 +1,87 @@
+package logica;
+
+import java.util.Random;
+
+public class Main
+{
+	
+	private static final int CASILLA_NEGRA = 1;
+	
+	public static void main(String[] args) {
+		int[][] matrix = {
+	      {1, 0, 1, 0, 1},
+	      {1, 1, 1, 1, 0},
+	      {0, 0, 0, 0, 0},
+	      {1, 0, 0, 0, 1},
+	      {1, 0, 0, 1, 1}
+		};
+  
+		int[][] mat = generarReferenciaFilas(matrix);
+  
+		imprimirMatriz(mat);
+
+	}
+	
+
+	public static int[][] generarReferenciaFilas(int[][] tableroCasillasNegras) 
+	{
+		int maxReferenciasPorFila = (tableroCasillasNegras.length + 1) / 2;
+	    
+	    int[][] referenciasCalculadas = new int[tableroCasillasNegras.length][maxReferenciasPorFila];
+
+	    return recorrerFilas(tableroCasillasNegras, referenciasCalculadas);
+	}
+
+	private static int[][] recorrerFilas(int[][] tableroCasillasNegras, int[][] referenciasCalculadas) 
+	{
+		for (int i = 0; i < tableroCasillasNegras.length; i++) 
+	    {
+	        int acumCasillasNegrasPorFila = 0, indiceReferenciasCalculadas = 0;
+	        
+	        boolean casillaAnteriorFueNegra = false;
+
+	        acumularCasillasNegrasPorFila(tableroCasillasNegras, i, acumCasillasNegrasPorFila, casillaAnteriorFueNegra, referenciasCalculadas, indiceReferenciasCalculadas);
+
+	        if (casillaAnteriorFueNegra) referenciasCalculadas[i][indiceReferenciasCalculadas] = acumCasillasNegrasPorFila;
+	    }
+	    return referenciasCalculadas;
+	}
+	
+	private static void acumularCasillasNegrasPorFila(int[][] tableroCasillasNegras,int filaActual, int acumCasillasNegrasPorFila,
+			boolean casillaAnteriorFueNegra, int[][] referenciasCalculadas, int indiceReferenciasCalculadas) 
+	{
+		for (int j = 0; j < tableroCasillasNegras[filaActual].length; j++) 
+        {	
+            if (tableroCasillasNegras[filaActual][j] == CASILLA_NEGRA) 
+            {
+            	acumCasillasNegrasPorFila++;
+            	
+            	casillaAnteriorFueNegra = true;
+            }
+            else if (casillaAnteriorFueNegra) guardarReferencia(referenciasCalculadas, filaActual, indiceReferenciasCalculadas, acumCasillasNegrasPorFila, casillaAnteriorFueNegra);
+        }
+	}
+
+	private static void guardarReferencia(int[][] referenciasCalculadas, int filaActual, int indiceReferenciasCalculadas, int acumCasillasNegrasPorFila, boolean casillaAnteriorFueNegra)
+	{
+		referenciasCalculadas[filaActual][indiceReferenciasCalculadas] = acumCasillasNegrasPorFila;
+    	
+    	acumCasillasNegrasPorFila = 0;
+    	
+    	indiceReferenciasCalculadas++;
+        
+        casillaAnteriorFueNegra = false;
+	}
+	
+	public static void imprimirMatriz(int[][] mat) 
+    {
+        for (int i = 0; i < mat.length; i++) 
+        {
+            for (int j = 0; j < mat[i].length; j++) 
+            {
+                System.out.print(mat[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
