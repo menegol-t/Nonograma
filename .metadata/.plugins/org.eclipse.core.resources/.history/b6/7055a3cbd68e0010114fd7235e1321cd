@@ -26,7 +26,7 @@ public class TableroDemo {
     {
         int[][] tablero = generarTablero(largoDelTablero);
         
-        int [][] referenciasColumnas = generarReferenciasColumnas(tablero, largoDelTablero);
+        int [][] referenciasColumnas = new int[largoDelTablero][3];
         
         int [][] referenciasFila = generarReferenciaFilas(tablero);
         

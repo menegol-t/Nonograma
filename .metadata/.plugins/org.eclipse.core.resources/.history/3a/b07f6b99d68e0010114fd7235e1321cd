@@ -1,0 +1,33 @@
+package logica;
+
+public class Main
+{
+	public static void main(String[] args) {
+//		int[][] matrix = {
+//			      {1, 0, 1, 0, 1},
+//			      {1, 1, 1, 1, 0},
+//			      {0, 0, 0, 0, 0},
+//			      {1, 0, 0, 0, 1},
+//			      {1, 0, 0, 1, 1}
+//				};
+		  
+//				int[][] mat = generarReferenciaFilas(matrix);
+				
+//				int[][] matr = generarReferenciasColumnas(matrix, 5);
+//		  
+//				imprimirMatriz(matr);
+	}
+    
+	
+//	public static void imprimirMatriz(int[][] mat) 
+//    {
+//        for (int i = 0; i < mat.length; i++) 
+//        {
+//            for (int j = 0; j < mat[i].length; j++) 
+//            {
+//                System.out.print(mat[i][j] + " ");
+//            }
+//            System.out.println();
+//        }
+//    }
+}

@@ -10,8 +10,6 @@ public class TableroDemo {
 
 
     private static final Random RANDOM = new Random();
-    
-    private static final int CASILLA_NEGRA = 1;
 
     private TableroDemo(int[][] tablero, int[][]referenciasCol, int[][] referenciasFila) 
     {
@@ -26,27 +24,13 @@ public class TableroDemo {
     {
         int[][] tablero = generarTablero(largoDelTablero);
         
-        int [][] referenciasColumnas = generarReferenciasColumnas(tablero, largoDelTablero);
+        int [][] rleferenciasCol = new int[largoDelTablero][3];
         
         int [][] referenciasFila = generarReferenciaFilas(tablero);
         
-        return new TableroDemo(tablero, referenciasColumnas, referenciasFila);
+        return new TableroDemo(tablero, rleferenciasCol, referenciasFila);
     }
-    
-    public static int[][] generarReferenciasColumnas(int[][] tableroCasillasNegras, int largoDelTablero)
-    {
-    	int[][] tableroGirado90Grados = new int[largoDelTablero][largoDelTablero];
-    	
-    	for(int i = 0; i < largoDelTablero; i++)
-    	{
-    		for(int j = 0; j < largoDelTablero; j++)
-    		{
-    			tableroGirado90Grados[j][largoDelTablero - 1 - i] = tableroCasillasNegras[i][j];
-    		}
-    	}
-    	
-    	return generarReferenciaFilas(tableroGirado90Grados);
-    }
+
     
     public static int[][] generarReferenciaFilas(int[][] tableroCasillasNegras) 
 	{
@@ -75,7 +59,7 @@ public class TableroDemo {
 	{
 		for (int j = 0; j < tableroCasillasNegras[filaActual].length; j++) 
         {	
-            if (tableroCasillasNegras[filaActual][j] == CASILLA_NEGRA) 
+            if (tableroCasillasNegras[filaActual][j] == 1) 
             {
             	acumCasillasNegrasPorFila++;
             	
