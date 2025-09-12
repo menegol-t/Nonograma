@@ -71,6 +71,16 @@ public class MainFormFirst {
 		buttonPlay.setFont(new Font("SansSerif", Font.BOLD, 20));
 		buttonPlay.setAlignmentX(Component.CENTER_ALIGNMENT); 
 
+		//  Navegar a VistaJuego
+		buttonPlay.addActionListener(e -> {
+		    
+		    VistaJuego juego = new VistaJuego();
+		    juego.showWindow(); // método nuevo en VistaJuego
+
+		    frame.setVisible(false);
+		});
+		
+		
 		JButton buttonComoJugar = new JButton("¿Cómo jugar?");
 		buttonComoJugar.setFont(new Font("SansSerif", Font.BOLD, 20));
 		buttonComoJugar.setAlignmentX(Component.CENTER_ALIGNMENT);

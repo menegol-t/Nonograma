@@ -346,4 +346,13 @@ public class VistaJuego {
 
 		grilla.add(boton);
 	}
-}
+
+
+	public void showWindow() {
+		if (frame != null) {
+            frame.setVisible(true);
+        }
+    }
+		
+	}
+
