@@ -13,6 +13,8 @@ public class TableroUsuario extends Tablero {
     
     private static final int CASILLA_CRUZ = 2;
 
+
+
     @Override
 	public void generarJuego() 
     {

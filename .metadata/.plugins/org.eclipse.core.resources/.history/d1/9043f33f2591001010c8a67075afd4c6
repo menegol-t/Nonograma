@@ -1,0 +1,58 @@
+package logica;
+
+public class TableroUsuario extends Tablero {
+
+    public TableroUsuario(int tamanio) {
+        
+    	super(tamanio);
+        
+		generarJuego();
+    }
+
+    @Override
+	public void generarJuego() 
+    {
+    	int tamanio = getTamanio();
+    	
+        setTablero(generarJuegoVacio(tamanio));
+    }
+    
+    private int[][] generarJuegoVacio(int tamanio)
+    {
+    	int [][] tablero = new int[tamanio][tamanio];
+    	
+    	for(int i = 0; i<tablero.length; i++)
+    		
+    		for(int j = 0; j<tablero.length; j++)
+    			
+    			tablero[i][j] = 0;
+    	
+    	return tablero;
+    }
+    
+    public void setCasilla(int fila, int columana, int estado)
+    {
+    	
+    }
+    
+    private  void validarParametros(int fila, int columna, int estado)
+	{
+		//if Estado < 0 || Estado > 2 --> Lanzar Excepcion
+		if(estado < 0 || estado > 2)
+		{
+			throw new IllegalArgumentException("Los unicos valores validos para el Estado de las casillas son 0, 1 y 2. "); 
+		}
+		
+		else if (fila < 0 || fila > getTamanio())
+		{
+			throw new ArrayIndexOutOfBoundsException("El indice de la fila debe estar en el rango del Tablero.");
+	
+		}
+	
+		else if (columna < 0 || columna > getTamanio())
+		{
+			throw new ArrayIndexOutOfBoundsException("El indice de la columna debe estar en el rango del Tablero.");
+	
+		}
+	}
+}

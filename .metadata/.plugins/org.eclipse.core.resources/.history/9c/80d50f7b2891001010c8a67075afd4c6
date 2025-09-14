@@ -1,0 +1,57 @@
+package logica;
+
+public class Juego 
+{
+	
+	private TableroUsuario _tableroUsuario;
+	
+	private TableroRespuesta _tableroRespuesta;
+	
+	
+	
+	public Juego(int tamanioDelTablero)
+	{
+		this._tableroUsuario = new TableroUsuario(tamanioDelTablero);
+		this._tableroRespuesta = new TableroRespuesta(tamanioDelTablero);
+	}
+	
+	
+	public int[][] getReferenciasCol()
+	{
+		return _tableroRespuesta.getReferenciasCol();
+	}
+	
+	public int[][] getReferenciasFilas()
+	{
+		return _tableroRespuesta.getReferenciasFila();
+	}
+	
+	public void setCasilla(int fila, int columna, int estado)
+	{
+		_tableroUsuario.setCasilla(fila, columna, estado);
+	}
+	
+	public int getCasilla(int fila, int columna)
+	{
+		return _tableroUsuario.getCasilla(fila, columna);
+	}
+	
+	public boolean validarJuego()
+	{
+		int[][] referenciasFilasUsuario = _tableroUsuario.getReferenciasFila();
+		int[][] referenciasColumnasUsuario = _tableroUsuario.getReferenciasCol();
+		
+		int[][] referenciasFilasRespuesta = _tableroRespuesta.getReferenciasFila();
+		int[][] referenciasColumnasRespuesta = _tableroRespuesta.getReferenciasCol();
+		
+		return (matrizesSonIguales(referenciasFilasUsuario, referenciasFilasRespuesta) 
+			 && matrizesSonIguales(referenciasColumnasUsuario, referenciasColumnasRespuesta));	
+	}
+	
+	private boolean matrizesSonIguales(int[][] primeraMatriz, int[][] segundaMatriz)
+	{
+		return true;
+	}
+		
+}
+

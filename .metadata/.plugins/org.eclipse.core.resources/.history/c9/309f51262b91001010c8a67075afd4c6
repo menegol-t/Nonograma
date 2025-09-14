@@ -13,6 +13,8 @@ public class TableroUsuario extends Tablero {
     
     private static final int CASILLA_CRUZ = 2;
 
+
+
     @Override
 	public void generarJuego() 
     {
@@ -61,5 +63,6 @@ public class TableroUsuario extends Tablero {
 		if (fila < 0 || fila > getTamanio()) throw new ArrayIndexOutOfBoundsException("El indice de la fila debe estar en el rango del Tablero.");
 	
 		else if (columna < 0 || columna > getTamanio()) throw new ArrayIndexOutOfBoundsException("El indice de la columna debe estar en el rango del Tablero.");
+		
 	}
 }

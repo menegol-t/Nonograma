@@ -35,16 +35,17 @@ public class Juego
 	
 	public boolean validarJuego()
 	{
-		_tableroUsuario.generarReferencias();
+		int[][] referenciasFilasUsuario = _tableroUsuario.getReferenciasFila();
+		int[][] referenciasColumnasUsuario = _tableroUsuario.getReferenciasCol();
 		
-		boolean igualesValoresEnFilas = matricesSonIguales(_tableroUsuario.getReferenciasFila(), _tableroRespuesta.getReferenciasFila());
+		int[][] referenciasFilasRespuesta = _tableroRespuesta.getReferenciasFila();
+		int[][] referenciasColumnasRespuesta = _tableroRespuesta.getReferenciasCol();
 		
-		boolean igualesValoresEnColumnas = matricesSonIguales(_tableroUsuario.getReferenciasCol(), _tableroRespuesta.getReferenciasCol());
-		
-		return	igualesValoresEnFilas && igualesValoresEnColumnas;
+		return (matrizesSonIguales(referenciasFilasUsuario, referenciasFilasRespuesta) 
+			 && matrizesSonIguales(referenciasColumnasUsuario, referenciasColumnasRespuesta));	
 	}
 	
-	private boolean matricesSonIguales(int[][] primeraMatriz, int[][] segundaMatriz)
+	private boolean matrizesSonIguales(int[][] primeraMatriz, int[][] segundaMatriz)
 	{
 		validarMatrices(primeraMatriz, segundaMatriz);
 		
@@ -54,7 +55,7 @@ public class Juego
 			for(int j = 0; j > segundaMatriz.length; j++) 
 			
 				valoresIdenticos = valoresIdenticos &&
-						primeraMatriz[i][j] == segundaMatriz[i][j];
+						primeraMatriz[i][j] == segundaMatriz  [i][j];
 		
 		return valoresIdenticos;	
 	}
@@ -69,3 +70,4 @@ public class Juego
 	}
 		
 }
+
