@@ -7,8 +7,6 @@ public class TableroUsuario extends Tablero {
     	super(tamanio);
         
 		generarJuego();
-	
-		generarReferencias();
     }
 
     @Override
@@ -39,38 +37,4 @@ public class TableroUsuario extends Tablero {
     			tablero[i][j] = 0;
     }
     
-    @Override
-    public void generarReferencias()
-    {
-    	generarReferenciasPorFilas();
-    	generarReferenciasPorColumna();
-    }
-    
-    @Override
-    public void generarReferenciasPorFilas() 
-    {
-    	int cantidadDeFilas = getTamanio();
-    	
-    	int maxReferenciasPorFila = (cantidadDeFilas + 1) / 2;
-    	
-    	int[][] referenciasVacias = new int[cantidadDeFilas][maxReferenciasPorFila];
-    	
-    	rellenarTablero(referenciasVacias);
-    	
-    	setReferenciasFila(referenciasVacias);
-    }
-
-    @Override
-    public void generarReferenciasPorColumna() 
-    {
-    	int cantidadDeFilas = getTamanio();
-    	
-    	int maxReferenciasPorFila = (cantidadDeFilas + 1) / 2;
-    	
-    	int[][] referenciasVacias = new int[cantidadDeFilas][maxReferenciasPorFila];
-    	
-    	rellenarTablero(referenciasVacias);
-    	
-    	setReferenciasCol(referenciasVacias);
-    }
 }

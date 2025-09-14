@@ -18,11 +18,93 @@ public abstract class Tablero
     
     public abstract void generarJuego();
     
-    public abstract void generarReferencias();
+    public void generarReferencias()
+	{
+		generarReferenciasPorFilas();
+		
+		generarReferenciasPorColumna(); 
+		
+	}
     
-    public abstract void generarReferenciasPorFilas();
+    public void generarReferenciasPorFilas() 
+	{
+		
+		setReferenciasFila(generarReferenciaFilas(_tablero));
+		
+	}
+    
+    public static int[][] generarReferenciaFilas(int[][] tableroCasillasNegras) 
+	{
+		int maxReferenciasPorFila = (tableroCasillasNegras.length + 1) / 2;
+	    
+	    int[][] referenciasCalculadas = new int[tableroCasillasNegras.length][maxReferenciasPorFila];
 
-    public abstract void generarReferenciasPorColumna();
+	    return recorrerFilas(tableroCasillasNegras, referenciasCalculadas);
+	}
+
+    private static int[][] recorrerFilas(int[][] tableroCasillasNegras, int[][] referenciasCalculadas) 
+	{
+		for (int i = 0; i < tableroCasillasNegras.length; i++) 
+	    {
+	        int acumCasillasNegrasPorFila = 0, indiceReferenciasCalculadas = 0;
+	        
+	        boolean casillaAnteriorFueNegra = false;
+
+	        acumularCasillasNegrasPorFila(tableroCasillasNegras, i, acumCasillasNegrasPorFila, casillaAnteriorFueNegra, referenciasCalculadas, indiceReferenciasCalculadas);
+	    }
+	    return referenciasCalculadas;
+	}
+	
+	private static void acumularCasillasNegrasPorFila(int[][] tableroCasillasNegras,int filaActual, int acumCasillasNegrasPorFila,
+			boolean casillaAnteriorFueNegra, int[][] referenciasCalculadas, int indiceReferenciasCalculadas) 
+	{
+		for (int j = 0; j < tableroCasillasNegras[filaActual].length; j++) 
+        {	
+            if (tableroCasillasNegras[filaActual][j] == 1) 
+            {
+            	acumCasillasNegrasPorFila++;
+            	
+            	casillaAnteriorFueNegra = true;
+            }
+            else if (casillaAnteriorFueNegra) 
+            {
+            	referenciasCalculadas[filaActual][indiceReferenciasCalculadas] = acumCasillasNegrasPorFila;
+            	
+            	acumCasillasNegrasPorFila = 0;
+            	
+            	indiceReferenciasCalculadas++;
+                
+                casillaAnteriorFueNegra = false;
+            }
+        }
+		
+		if (casillaAnteriorFueNegra) referenciasCalculadas[filaActual][indiceReferenciasCalculadas] = acumCasillasNegrasPorFila;
+	}
+    
+	public void generarReferenciasPorColumna() 
+	{
+		int[][] tableroConCasillasNegras = _tablero;
+		
+		int tamanio = getTamanio();
+		
+		setReferenciasCol(generarReferenciasColumnas(tableroConCasillasNegras, tamanio)); 
+		
+	}
+	
+	public static int[][] generarReferenciasColumnas(int[][] tableroCasillasNegras, int largoDelTablero)
+    {
+    	int[][] tableroGirado90Grados = new int[largoDelTablero][largoDelTablero];
+    	
+    	for(int i = 0; i < largoDelTablero; i++)
+    	{
+    		for(int j = 0; j < largoDelTablero; j++)
+    		{
+    			tableroGirado90Grados[j][largoDelTablero - 1 - i] = tableroCasillasNegras[i][j];
+    		}
+    	}
+    	
+    	return generarReferenciaFilas(tableroGirado90Grados);
+    }
     
     public int[][] getTablero() 
     {
