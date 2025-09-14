@@ -7,7 +7,6 @@ public abstract class Tablero
     private int[][] _referenciasFila;
     private int _tamanio;
     
-    private static final int CASILLA_NEGRA = 1;
     
     public Tablero(int tamanio) 
     {
@@ -23,7 +22,7 @@ public abstract class Tablero
 	{
     	setReferenciasFila(generarReferenciaFilas(_tablero));
 		
-    	setReferenciasCol(generarReferenciasColumnas(_tablero, _tamanio));
+		generarReferenciasPorColumna();
 	}
     
     private static int[][] generarReferenciaFilas(int[][] tableroCasillasNegras) 
@@ -53,7 +52,7 @@ public abstract class Tablero
 	{
 		for (int j = 0; j < tableroCasillasNegras[filaActual].length; j++) 
         {	
-            if (tableroCasillasNegras[filaActual][j] == CASILLA_NEGRA) 
+            if (tableroCasillasNegras[filaActual][j] == 1) 
             {
             	acumCasillasNegrasPorFila++;
             	
@@ -72,6 +71,16 @@ public abstract class Tablero
         }
 		
 		if (casillaAnteriorFueNegra) referenciasCalculadas[filaActual][indiceReferenciasCalculadas] = acumCasillasNegrasPorFila;
+	}
+    
+	private void generarReferenciasPorColumna() 
+	{
+		int[][] tableroConCasillasNegras = _tablero;
+		
+		int tamanio = getTamanio();
+		
+		setReferenciasCol(generarReferenciasColumnas(tableroConCasillasNegras, tamanio)); 
+		
 	}
 	
 	private static int[][] generarReferenciasColumnas(int[][] tableroCasillasNegras, int largoDelTablero)
@@ -107,12 +116,12 @@ public abstract class Tablero
     	return _tamanio;
     }
     
-    public void setTablero(int[][] tablero) 
+    protected void setTablero(int[][] tablero) 
     {
         _tablero = tablero;
     }
 
-    private void setReferenciasCol(int[][] referenciasCol) 
+    protected void setReferenciasCol(int[][] referenciasCol) 
     {
         _referenciasCol = referenciasCol;
     }

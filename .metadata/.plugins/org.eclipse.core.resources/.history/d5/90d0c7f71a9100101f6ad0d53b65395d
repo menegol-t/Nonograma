@@ -19,6 +19,15 @@ public class TableroUsuario extends Tablero {
     
     private int[][] generarJuegoVacio(int tamanio)
     {
+    	int [][] juego = new int[tamanio][tamanio];
+    	
+    	rellenarTablero(juego);
+    	
+    	return juego;
+    }
+    
+    private int[][] generarJuegoVacio(int tamanio)
+    {
     	int [][] tablero = new int[tamanio][tamanio];
     	
     	for(int i = 0; i<tablero.length; i++)
