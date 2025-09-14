@@ -8,9 +8,9 @@ public class testTablero {
 		
 		r.toString();
 		
-//		TableroUsuario u = new TableroUsuario(5);
-//		
-//		u.toString();
+		TableroUsuario u = new TableroUsuario(5);
+		
+		u.toString();
 		
 	}
 

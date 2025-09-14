@@ -117,13 +117,13 @@ public abstract class Tablero
         _referenciasCol = referenciasCol;
     }
 
-    private void setReferenciasFila(int[][] referenciasFila) 
+    protected void setReferenciasFila(int[][] referenciasFila) 
     {
         _referenciasFila = referenciasFila;
     }
 
-    private static void imprimirMatriz(int[][] mat) 
-    {	
+    public static void imprimirMatriz(int[][] mat) 
+    {
         for (int i = 0; i < mat.length; i++) {
             for (int j = 0; j < mat[i].length; j++) {
                 System.out.print(mat[i][j] + " ");
@@ -134,16 +134,7 @@ public abstract class Tablero
 
     @Override
     public String toString() {
-    	
-    	System.out.print("Grilla: \n");
         imprimirMatriz(_tablero);
-        
-        System.out.print("Referencias Columna: \n");
-        imprimirMatriz(_referenciasCol);
-        
-        System.out.print("Referencias Fila: \n");
-        imprimirMatriz(_referenciasFila);
-        
         return "";
     }
 }
