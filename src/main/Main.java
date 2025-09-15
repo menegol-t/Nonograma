@@ -1,10 +1,22 @@
 package main;
 
+import interfaz.MenuTest;
+import interfaz.VistaJuego;
+import logica.Juego;
+
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
+		//Iniciar el front --> MainFormFirst
 
+		MenuTest menu = new MenuTest();
+		
+		menu.generarVentana();
+		
+		
+		
+		
 	}
 
 }
