@@ -139,7 +139,7 @@ public class vistaMenuInicio extends JPanel
 		botonDeJugar.addActionListener(evento -> 
         {
         	controller.generarJuego(tamanioSeleccionado);
-        	controller.generarVistaJugar();
+        	controller.crearVistaJugar();
             controller.mostrarVista("vista del juego");
         });
 	}

@@ -23,7 +23,7 @@ public class Frame extends JFrame
 	{
 		setTitle("Nonograma - Programación III");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(new Dimension(600, 400));
+        setSize(new Dimension(800, 800));
         setLocationRelativeTo(null);
         setResizable(false);
       
@@ -64,7 +64,6 @@ public class Frame extends JFrame
 		return ((vistaMenuInicio) menu).getTamanioSeleccionado();
 		
 	}
-	
 
 	public void mostrarVista(String nombreDeVista) 
 	{
@@ -84,12 +83,12 @@ public class Frame extends JFrame
 	    repaint();
 	}
 
-	public void generarVistaJugar()
+	public void crearVistaJugar()
 	{
 		vistaJugar vistaDeJuego = new vistaJugar(this);
 		vistas.put("vista del juego", vistaDeJuego);
 	}
-	
+
 	public void crearVistaMenu() 
 	{
 		vistaMenuInicio menuInicio = new vistaMenuInicio(this);
@@ -102,11 +101,37 @@ public class Frame extends JFrame
 		vistas.put("como jugar", comoJugar);
 	}
 
-	public int GetEstadoCasilla(int fila, int columna) {
+	public void crearVistaPerdiste()
+	{
+		vistaPerder derrota = new vistaPerder(this);
+		vistas.put("perdiste", derrota);
+	}
+	
+	public void crearVistaGanaste() {
+		vistaGanar victoria = new vistaGanar(this);
+		vistas.put("ganaste", victoria);
+	}
+	
+ 	public int GetEstadoCasilla(int fila, int columna) {
 		
 		return juegoActual.getCasilla(fila, columna);
 	
 	}
 	
-  
-}
+	public boolean verificarResultado()
+	{
+		return juegoActual.validarJuego();
+	}
+	
+	public int[][] conseguirTableroUsuario()
+	{
+		return juegoActual.getRespuestaUsuario();
+	}
+	
+	public int[][] conseguirTableroRespuesta()
+	{
+		return juegoActual.getRespuestaCorrectaTrasFallar();
+	}
+
+	
+}	

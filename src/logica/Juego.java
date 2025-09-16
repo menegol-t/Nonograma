@@ -62,26 +62,38 @@ public class Juego
 	
 	private boolean matricesSonIguales(int[][] primeraMatriz, int[][] segundaMatriz)
 	{
-		validarMatrices(primeraMatriz, segundaMatriz);
-		
-		boolean valoresIdenticos = true;
-		
-		for(int i = 0; i < primeraMatriz.length; i++) 
-			for(int j = 0; j > segundaMatriz.length; j++) 
-			
-				valoresIdenticos = valoresIdenticos &&
-						primeraMatriz[i][j] == segundaMatriz[i][j];
-		
-		return valoresIdenticos;	
+	    if (primeraMatriz.length != segundaMatriz.length) 
+	    {
+	        return false;
+	    }
+	    
+	    for (int i = 0; i < primeraMatriz.length; i++) 
+	    
+	    {
+	        if (primeraMatriz[i].length != segundaMatriz[i].length) {
+	            return false;
+	        }
+	        
+	        for (int j = 0; j < primeraMatriz[i].length; j++) 
+	        {
+	            // Compare the values
+	            if (primeraMatriz[i][j] != segundaMatriz[i][j]) 
+	            {
+	                return false;
+	            }
+	        }
+	    }
+	    
+	    return true;
 	}
 	
-	private void validarMatrices(int[][] primeraMatriz, int[][] segundaMatriz)
-	{	
-		if(primeraMatriz.length != segundaMatriz.length) 
-			throw new IllegalArgumentException("Las matrices deben tener la misma cantidad de filas.");
-		
-		if(primeraMatriz[0].length != segundaMatriz[0].length) 
-			throw new IllegalArgumentException("Las matrices deben tener la misma cantidad de columnas.");
-	}
+//	private void validarMatrices(int[][] primeraMatriz, int[][] segundaMatriz)
+//	{	
+//		if(primeraMatriz.length != segundaMatriz.length) 
+//			throw new IllegalArgumentException("Las matrices deben tener la misma cantidad de filas.");
+//		
+//		if(primeraMatriz[0].length != segundaMatriz[0].length) 
+//			throw new IllegalArgumentException("Las matrices deben tener la misma cantidad de columnas.");
+//	}
 		
 }
