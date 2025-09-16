@@ -7,7 +7,13 @@ public class Juego
 	
 	private TableroRespuesta _tableroRespuesta;
 	
-	public Juego(int tamanioDelTablero)
+	public Juego()
+	{
+		_tableroUsuario = null;
+		_tableroRespuesta = null;
+	}
+	
+	public void generarJuego(int tamanioDelTablero)
 	{
 		this._tableroUsuario = new TableroUsuario(tamanioDelTablero);
 		this._tableroRespuesta = new TableroRespuesta(tamanioDelTablero);
@@ -21,6 +27,16 @@ public class Juego
 	public int[][] getReferenciasFilas()
 	{
 		return _tableroRespuesta.getReferenciasFila();
+	}
+	
+	public int[][] getRespuestaCorrectaTrasFallar()
+	{
+		return _tableroRespuesta.getTablero();
+	}
+	
+	public int[][] getRespuestaUsuario()
+	{
+		return _tableroUsuario.getTablero();
 	}
 	
 	public void setCasilla(int fila, int columna, int estado)

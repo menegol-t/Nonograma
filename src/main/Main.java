@@ -1,19 +1,34 @@
 package main;
 
-import interfaz.MenuTest;
-import interfaz.VistaJuego;
+import javax.swing.SwingUtilities;
+
+import com.formdev.flatlaf.FlatDarkLaf;
+
+import interfaz.Frame;
 import logica.Juego;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) 
+	{
+		Juego juego = new Juego();
 		
-		//Iniciar el front --> MainFormFirst
+		
+		SwingUtilities.invokeLater(() -> 
+		{
+            try {
+                // Set the Look and Feel once, at the very beginning
+                FlatDarkLaf.setup();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-		MenuTest menu = new MenuTest();
-		
-		menu.generarVentana();
-		
+            // Create and show your Frame after the L&F is set up
+            Frame nonogramFrame = new Frame(juego);
+            nonogramFrame.setVisible(true);
+            
+            
+        });
 		
 		
 		

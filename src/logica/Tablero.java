@@ -131,6 +131,7 @@ public abstract class Tablero
             System.out.println();
         }
     }
+    
 
     @Override
     public String toString() {
