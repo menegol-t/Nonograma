@@ -10,13 +10,14 @@ import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 public class vistaJugar extends JPanel
@@ -27,13 +28,14 @@ public class vistaJugar extends JPanel
     private JPanel panelReferenciasHorizontales;
     private JPanel panelReferenciasVerticales;
     private JPanel panelOpciones;
-
-    private JLabel titulo;
-
-    private static final Font FUENTE_TITULO = new Font("Segoe UI", Font.BOLD, 22);
+    private JPanel panelJuego;
+    
     private static final Font FUENTE_BOTONES = new  Font("Segoe UI", Font.BOLD, 13);
     private static final Font FUENTE_CASILLAS = new Font("Dialog", Font.BOLD, 40);
-
+    private static final Font FUENTE_REFERENCIAS = new Font("Segoe UI", Font.BOLD, 14);
+    
+    private static final Color colorFondoReferencias = new Color(31, 43, 52, 200);
+    
     private static final int CASILLA_BLANCA = 0;
     private static final int CASILLA_NEGRA = 1;
     private static final int CASILLA_MARCADA = 2;
@@ -49,7 +51,7 @@ public class vistaJugar extends JPanel
 
     private JButton[][] casillas; 
 
-    Color colorFondo2 = new Color(31, 43, 52, 200);
+    
 
     public vistaJugar(Frame frame)
     {
@@ -64,8 +66,6 @@ public class vistaJugar extends JPanel
 
         generarPaneles();
 
-//      configurarTitulo();
-
         configurarBotonesDeOpciones();
 
         generarCasillas();
@@ -76,7 +76,11 @@ public class vistaJugar extends JPanel
     private JButton generarCasilla() 
     {
         JButton boton = new JButton("");
-        boton.setBorder(null);
+        
+        Border cellBorder = BorderFactory.createLineBorder(Color.DARK_GRAY, 2);
+        
+        boton.setBorder(cellBorder); 
+        
         boton.setFont(FUENTE_CASILLAS);  
         boton.setFocusable(false);
         boton.setBackground(Color.white);
@@ -94,16 +98,16 @@ public class vistaJugar extends JPanel
         boton.addMouseListener(new MouseAdapter() 
         {
             @Override
-            public void mouseClicked(MouseEvent e) 
+            public void mouseClicked(MouseEvent evento) 
             {
 
-                if (e.getButton() == MouseEvent.BUTTON1) 
+                if (evento.getButton() == MouseEvent.BUTTON1) 
                 {
                     boton.setText("");
                     boton.setBackground(Color.BLACK);
                     controller.cambiarEstadoCasilla(fila, columna, CASILLA_NEGRA);
 
-                    if (e.getClickCount() > 1) 
+                    if (evento.getClickCount() > 1) 
                     {
                         controller.cambiarEstadoCasilla(fila, columna, CASILLA_BLANCA);
                         boton.setBackground(Color.WHITE);
@@ -111,14 +115,14 @@ public class vistaJugar extends JPanel
                     }
 
                 } 
-                else if (e.getButton() == MouseEvent.BUTTON3) 
+                else if (evento.getButton() == MouseEvent.BUTTON3) 
                 {
                     boton.setBackground(new Color(192, 192, 192));
                     boton.setForeground(Color.RED);
                     boton.setText("X");
                     controller.cambiarEstadoCasilla(fila, columna, CASILLA_MARCADA);
 
-                    if (e.getClickCount() > 1) 
+                    if (evento.getClickCount() > 1) 
                     {
                         controller.cambiarEstadoCasilla(fila, columna, CASILLA_BLANCA);
                         boton.setBackground(Color.WHITE);
@@ -160,86 +164,109 @@ public class vistaJugar extends JPanel
     {
     	panelOpciones = new JPanel(new GridLayout(10, 1, 5, 5));
         panelOpciones.setBorder(new EmptyBorder(10, 10, 10, 11));
-        panelOpciones.setBackground(new Color(200, 100, 50, 30));
+        panelOpciones.setBackground(Color.DARK_GRAY);
         
-        JPanel panelJuego = new JPanel(new GridBagLayout());
-        panelJuego.setBackground(new Color(200, 100, 50, 30));
+        panelJuego = new JPanel(new GridBagLayout());
+        panelJuego.setBackground(Color.DARK_GRAY);
 
+//        panelJuego.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        
         add(panelJuego, BorderLayout.CENTER);
         add(panelOpciones, BorderLayout.EAST);
         
-        configurarPanelJuego(panelJuego);
+        configurarPanelJuego();
     }
 
-    private void configurarPanelJuego(JPanel panelJuego) {
+    private void configurarPanelJuego() 
+    {
         panelTablero = new JPanel(new GridLayout(tamanioTablero, tamanioTablero));
         panelTablero.setBackground(Color.LIGHT_GRAY);
 
         panelReferenciasHorizontales = new JPanel(new GridLayout(tamanioTablero, 1, 2, 2));
         panelReferenciasHorizontales.setBackground(new Color(31, 43, 52, 200));
-
+        panelReferenciasHorizontales.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+        
         panelReferenciasVerticales = new JPanel(new GridLayout(1, tamanioTablero, 2, 2));
         panelReferenciasVerticales.setBackground(new Color(31, 43, 52, 200));
-
+        panelReferenciasVerticales.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+        
         JPanel panelVacio = new JPanel();
-        panelVacio.setBackground(new Color(31, 43, 52, 200));
+        panelVacio.setBackground(Color.DARK_GRAY);
 
-        GridBagConstraints gbc = new GridBagConstraints();
+        GridBagConstraints diseño = new GridBagConstraints();
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.BOTH;
-        panelJuego.add(panelVacio, gbc);
+        diseño.gridx = 0; diseño.gridy = 0;
+        diseño.weightx = 0.0; diseño.weighty = 0.0;
+        diseño.fill = GridBagConstraints.BOTH;
+        panelJuego.add(panelVacio, diseño);
 
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.BOTH;
-        panelJuego.add(panelReferenciasVerticales, gbc);
+        diseño.gridx = 1; diseño.gridy = 0;
+        diseño.weightx = 1.0; diseño.weighty = 0.0;
+        diseño.fill = GridBagConstraints.BOTH;
+        panelJuego.add(panelReferenciasVerticales, diseño);
 
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.fill = GridBagConstraints.BOTH;
-        panelJuego.add(panelReferenciasHorizontales, gbc);
+        diseño.gridx = 0; diseño.gridy = 1;
+        diseño.weightx = 0.0; diseño.weighty = 1.0;
+        diseño.fill = GridBagConstraints.BOTH;
+        panelJuego.add(panelReferenciasHorizontales, diseño);
 
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        gbc.fill = GridBagConstraints.BOTH;
-        panelJuego.add(panelTablero, gbc);
+        diseño.gridx = 1; diseño.gridy = 1;
+        diseño.weightx = 1.0; diseño.weighty = 1.0;
+        diseño.fill = GridBagConstraints.BOTH;
+        panelJuego.add(panelTablero, diseño);
     }
     
-    private void mostrarReferencias() {
+    private void mostrarReferencias() 
+    {
         // horizontales
         panelReferenciasHorizontales.setLayout(new GridLayout(tamanioTablero, 1, 2, 2));
-        panelReferenciasHorizontales.setBackground(colorFondo2);
+        panelReferenciasHorizontales.setBackground(colorFondoReferencias);
 
-        for (int i = 0; i < tamanioTablero; i++) {
-            JPanel fila = new JPanel(new GridLayout(1, referenciasFilas[i].length, 2, 2));
-            fila.setBackground(colorFondo2);
-            for (int valor : referenciasFilas[i]) {
-                JLabel lbl = new JLabel(valor == 0 ? "" : String.valueOf(valor), SwingConstants.CENTER);
-                lbl.setFont(new Font("Segoe UI", Font.BOLD, 14));
-                lbl.setForeground(Color.WHITE);
-                fila.add(lbl);
-            }
-            panelReferenciasHorizontales.add(fila);
-        }
+        agregarReferenciasColumnas();
 
         // verticales
         panelReferenciasVerticales.setLayout(new GridLayout(1, tamanioTablero, 2, 2));
-        panelReferenciasVerticales.setBackground(colorFondo2);
+        panelReferenciasVerticales.setBackground(colorFondoReferencias);
 
-        for (int c = 0; c < tamanioTablero; c++) {
-            JPanel col = new JPanel(new GridLayout(referenciasColumnas[c].length, 1, 2, 2));
-            col.setBackground(colorFondo2);
-            for (int valor : referenciasColumnas[c]) {
-                JLabel lbl = new JLabel(valor == 0 ? "" : String.valueOf(valor), SwingConstants.CENTER);
-                lbl.setFont(new Font("Segoe UI", Font.BOLD, 14));
-                lbl.setForeground(Color.WHITE);
-                col.add(lbl);
-            }
-            panelReferenciasVerticales.add(col);
-        }
+        agregarReferenciasFilas();
     }
+
+	private void agregarReferenciasFilas() 
+	{
+		for (int i = 0; i < tamanioTablero; i++) 
+        {
+            JPanel columna = new JPanel(new GridLayout(referenciasColumnas[i].length, 1, 2, 2));
+            columna.setBackground(colorFondoReferencias);
+            columna.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); 
+            for (int valor : referenciasColumnas[i]) 
+            {
+                JLabel referencia = new JLabel(valor == 0 ? "" : String.valueOf(valor), SwingConstants.CENTER);
+                referencia.setFont(FUENTE_REFERENCIAS);
+                referencia.setForeground(Color.WHITE);
+                columna.add(referencia);
+            }
+            panelReferenciasVerticales.add(columna);
+        }
+	}
+
+	private void agregarReferenciasColumnas() 
+	{
+		for (int i = 0; i < tamanioTablero; i++) 
+        {
+            JPanel fila = new JPanel(new GridLayout(1, referenciasFilas[i].length, 2, 2));
+            fila.setBackground(colorFondoReferencias);
+            fila.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); 
+            
+            for (int valor : referenciasFilas[i]) 
+            {
+                JLabel referencia = new JLabel(valor == 0 ? "" : String.valueOf(valor), SwingConstants.CENTER);
+                referencia.setFont(FUENTE_REFERENCIAS);
+                referencia.setForeground(Color.WHITE);
+                fila.add(referencia);
+            }
+            panelReferenciasHorizontales.add(fila);
+        }
+	}
 
     private void configurarBotonesDeOpciones() 
     {
@@ -268,8 +295,10 @@ public class vistaJugar extends JPanel
     {
         if (casillas == null) return;
 
-        for (int i = 0; i < tamanioTablero; i++) {
-            for (int j = 0; j < tamanioTablero; j++) {
+        for (int i = 0; i < tamanioTablero; i++) 
+        {
+            for (int j = 0; j < tamanioTablero; j++) 
+            {
                 JButton celda = casillas[i][j];
                 if (celda == null) continue;
                 celda.setText("");
@@ -284,18 +313,20 @@ public class vistaJugar extends JPanel
 
     private void agregarAccionBotonesDelOpciones() 
     {
-        botonDePista.addMouseListener(new MouseAdapter() {
+        botonDePista.addMouseListener(new MouseAdapter() 
+        {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(MouseEvent evento) {
                 JOptionPane.showMessageDialog(botonDePista, "Toma una pista 🧩");
             }
         });
 
-        botonLimpiarTablero.addActionListener(e -> limpiarTablero());
+        botonLimpiarTablero.addActionListener(evento -> limpiarTablero());
 
-        botonDeVerificarResultado.addMouseListener(new MouseAdapter() {
+        botonDeVerificarResultado.addMouseListener(new MouseAdapter() 
+        {
             @Override
-            public void mouseClicked(MouseEvent e) 
+            public void mouseClicked(MouseEvent evento) 
             {
             	
             	if(controller.verificarResultado())
@@ -315,16 +346,6 @@ public class vistaJugar extends JPanel
             
         });
     }
-
-    private static void imprimirMatriz(int[][] mat) 
-    {	
-        for (int i = 0; i < mat.length; i++) {
-            for (int j = 0; j < mat[i].length; j++) {
-                System.out.print(mat[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
     
     private void configurarBotonDePista() {
         botonDePista = new JButton("Dame Una Pista");
@@ -332,12 +353,4 @@ public class vistaJugar extends JPanel
         panelOpciones.add(botonDePista);
         botonDePista.setFont(FUENTE_BOTONES);
     }
-
-//    private void configurarTitulo() 
-//    {
-//        titulo = new JLabel("NONOGRAMA");
-//        titulo.setFont(FUENTE_TITULO);
-//        titulo.setHorizontalAlignment(SwingConstants.CENTER);
-//        add(titulo, BorderLayout.NORTH);
-//    }
 }

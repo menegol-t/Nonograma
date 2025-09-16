@@ -7,7 +7,8 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import interfaz.Frame;
 import logica.Juego;
 
-public class Main {
+public class Main 
+{
 
 	public static void main(String[] args) 
 	{

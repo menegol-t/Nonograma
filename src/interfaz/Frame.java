@@ -23,7 +23,7 @@ public class Frame extends JFrame
 	{
 		setTitle("Nonograma - Programación III");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(new Dimension(800, 800));
+        setSize(new Dimension(800, 700));
         setLocationRelativeTo(null);
         setResizable(false);
       

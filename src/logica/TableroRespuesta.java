@@ -54,9 +54,14 @@ public class TableroRespuesta extends Tablero
             
             if (nosPasamosDeLaMitad(totalCasillasNegras, casillasNegrasDisponibles)) 
             {	
-                maximo = 4; minimo = 3;
+                maximo = (int) Math.round(cantidadDeFilas * 0.8); //originalmente 4 para 5x5
+                minimo = (int) Math.round(cantidadDeFilas * 0.6); //originalmente 3 para 5x5
             } else {
-                maximo = 2; minimo = 1;
+                maximo = (int) Math.round(cantidadDeFilas * 0.4); //originalmente 2 para 5x5
+                minimo = (int) Math.round(cantidadDeFilas * 0.2); //originalmente 1 para 5x5
+                
+                if (minimo == 0) minimo = 1;
+                
             }
             int[] filaActual = tablero[patronAleatorio[i]];
             
