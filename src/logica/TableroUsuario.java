@@ -1,8 +1,10 @@
 package logica;
 
-public class TableroUsuario extends Tablero {
+public class TableroUsuario extends Tablero 
+{
 
-    public TableroUsuario(int tamanio) {
+    public TableroUsuario(int tamanio) 
+    {
         
     	super(tamanio);
         

@@ -1,0 +1,137 @@
+package interfaz;
+
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import logica.Juego;
+
+import java.awt.Dimension;
+
+public class Frame extends JFrame
+{
+
+	private Juego juegoActual;
+	private JPanel vistaActual;
+//	private JPanel nuevaVista;
+	private Map<String, JPanel> vistas;
+
+	public Frame(Juego juego)
+	{
+		setTitle("Nonograma - Programación III");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(new Dimension(800, 700));
+        setLocationRelativeTo(null);
+        setResizable(false);
+      
+        juegoActual = juego;
+        
+        vistas = new HashMap<>();
+        
+    	crearVistaMenu();
+    	
+        mostrarVista("menu");
+        
+	}
+
+	public void generarJuego(int tamanioSeleccionado)
+	{
+		juegoActual.generarJuego(tamanioSeleccionado);
+	}
+	
+	public void cambiarEstadoCasilla(int fila, int columna, int estado)
+	{
+		juegoActual.setCasilla(fila, columna, estado);
+	}
+	
+	public int[][] conseguirReferenciasFila()
+	{
+		return juegoActual.getReferenciasFilas();
+	}
+	
+	public int[][] conseguirReferenciasCol()
+	{
+		return juegoActual.getReferenciasCol();
+	}
+	
+	public int getTamanioJuego()
+	{
+		JPanel menu = vistas.get("menu");
+		
+		return ((vistaMenuInicio) menu).getTamanioSeleccionado();
+		
+	}
+
+	public void mostrarVista(String nombreDeVista) 
+	{
+		
+	    JPanel nuevaVista = vistas.get(nombreDeVista);
+
+	    if (vistaActual != null && vistaActual != nuevaVista) 
+	    {
+	        this.remove(vistaActual);
+	    }
+	    
+	    this.add(nuevaVista);
+	    
+	    vistaActual = nuevaVista;
+
+	    revalidate();
+	    repaint();
+	}
+
+	public void crearVistaJugar()
+	{
+		vistaJugar vistaDeJuego = new vistaJugar(this);
+		vistas.put("vista del juego", vistaDeJuego);
+	}
+
+	public void crearVistaMenu() 
+	{
+		vistaMenuInicio menuInicio = new vistaMenuInicio(this);
+		vistas.put("menu", menuInicio);
+	}
+	
+	public void crearVistaComoJugar()
+	{
+		VistaDeComoJugar comoJugar = new VistaDeComoJugar(this);
+		vistas.put("como jugar", comoJugar);
+	}
+
+	public void crearVistaPerdiste()
+	{
+		vistaPerder derrota = new vistaPerder(this);
+		vistas.put("perdiste", derrota);
+	}
+	
+	public void crearVistaGanaste() {
+		vistaGanar victoria = new vistaGanar(this);
+		vistas.put("ganaste", victoria);
+	}
+	
+ 	public int GetEstadoCasilla(int fila, int columna) {
+		
+		return juegoActual.getCasilla(fila, columna);
+	
+	}
+	
+	public boolean verificarResultado()
+	{
+		return juegoActual.validarJuego();
+	}
+	
+	public int[][] conseguirTableroUsuario()
+	{
+		return juegoActual.getRespuestaUsuario();
+	}
+	
+	public int[][] conseguirTableroRespuesta()
+	{
+		return juegoActual.getRespuestaCorrectaTrasFallar();
+	}
+
+	
+}	

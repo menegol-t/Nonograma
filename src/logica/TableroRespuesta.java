@@ -16,12 +16,6 @@ public class TableroRespuesta extends Tablero
 	}
 	
     private static final Random RANDOM = new Random();
-
-//	  Todavia sin testear a fondo para hacerlo funcionar con constante	
-//    private static final int CASILLA_NEGRA = 1;
-	  
-// 	  Esto no se puede hacer a menos que getTablero y tablero sean static (pensar)
-//    private static final int[][] tableroConCasillasNegras = getTablero();
 	
 	@Override
 	public void generarJuego() 
@@ -54,15 +48,15 @@ public class TableroRespuesta extends Tablero
             
             if (nosPasamosDeLaMitad(totalCasillasNegras, casillasNegrasDisponibles)) 
             {	
-                maximo = (int) Math.round(cantidadDeFilas * 0.8); //originalmente 4 para 5x5
-                minimo = (int) Math.round(cantidadDeFilas * 0.6); //originalmente 3 para 5x5
+                maximo = (int) Math.round(cantidadDeFilas * 0.8); 
+                minimo = (int) Math.round(cantidadDeFilas * 0.6); 
             } else {
-                maximo = (int) Math.round(cantidadDeFilas * 0.4); //originalmente 2 para 5x5
-                minimo = (int) Math.round(cantidadDeFilas * 0.2); //originalmente 1 para 5x5
+                maximo = (int) Math.round(cantidadDeFilas * 0.4); 
+                minimo = (int) Math.round(cantidadDeFilas * 0.2); 
                 
                 if (minimo == 0) minimo = 1;
-                
             }
+            
             int[] filaActual = tablero[patronAleatorio[i]];
             
             casillasNegrasDisponibles -= rellenarFilasYActualizar(filaActual, casillasNegrasDisponibles, maximo, minimo);
@@ -155,6 +149,4 @@ public class TableroRespuesta extends Tablero
         
         return Math.round(totalCasillasDelTablero * porcentajeDeNegrasDelTablero);
     }
-
-	
 }

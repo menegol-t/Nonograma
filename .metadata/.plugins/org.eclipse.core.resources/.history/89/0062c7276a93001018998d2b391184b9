@@ -1,0 +1,178 @@
+package interfaz;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
+public class VistaMenuInicio extends JPanel
+{
+
+	private Frame _controlador;
+
+    private JLabel titulo;
+    private JComboBox<String> listaDeModos;
+    private JButton botonComoJugar;
+    private JButton botonDeJugar;
+
+    private static final String TITULO_APP = "Nonograma - Programación III";
+    private static final Font FUENTE_TITULO = new Font("SansSerif", Font.BOLD, 24);
+    private static final Font FUENTE_BOTONES = new Font("SansSerif", Font.BOLD, 16);
+    private static final Font FUENTE_OPCIONES = new Font("SansSerif", Font.BOLD, 16);
+    
+    String[] modosDeJuego = {"5x5", "10x10", "15x15"};
+    
+    private int tamanioSeleccionado;
+    
+    
+    
+    public VistaMenuInicio(Frame controller) 
+    {
+        this._controlador = controller;
+        this.setLayout(new BorderLayout());
+
+        configurarComponentes();
+        agregarAcciones();
+    }
+
+    private void configurarComponentes() 
+    { 
+        configurarTitulo();
+
+        configurarListaDeModos();
+        
+        tamanioSeleccionado = 5;
+        
+        configurarBotones();
+    }
+
+	private void configurarBotones() 
+	{
+		JPanel panelDeBotones = new JPanel();
+        
+        configurarBotonComoJugar(panelDeBotones);
+
+        configurarBotonDeJugar(panelDeBotones);
+        
+        this.add(panelDeBotones, BorderLayout.SOUTH);
+	}
+
+	private void configurarBotonDeJugar(JPanel panelDeBotones) 
+	{
+		botonDeJugar = new JButton("Jugar");
+        botonDeJugar.setFont(FUENTE_BOTONES);
+        botonDeJugar.setPreferredSize(new Dimension(150, 50));
+        botonDeJugar.setFocusPainted(false);
+        panelDeBotones.add(botonDeJugar);
+	}
+
+	private void configurarBotonComoJugar(JPanel panelDeBotones) 
+	{
+		botonComoJugar = new JButton("¿Cómo jugar?");
+        botonComoJugar.setFont(FUENTE_BOTONES);
+        botonComoJugar.setPreferredSize(new Dimension(150, 50));
+        botonComoJugar.setFocusPainted(false);
+        panelDeBotones.add(botonComoJugar);
+	}
+
+	private void configurarListaDeModos() 
+	{
+		JPanel panelListaDeModos = new JPanel(new GridBagLayout());
+        
+        GridBagConstraints diseñoListaDeModos = new GridBagConstraints();
+        
+        
+        JLabel etiquetaDeListaDeModos = new JLabel("Elige el modo de juego: ");
+        
+        etiquetaDeListaDeModos.setFont(FUENTE_OPCIONES);
+        
+        
+        diseñoListaDeModos.gridx = 0; diseñoListaDeModos.gridy = 0; 
+        
+        diseñoListaDeModos.anchor = GridBagConstraints.LINE_END;
+        
+        panelListaDeModos.add(etiquetaDeListaDeModos, diseñoListaDeModos);
+
+        
+        listaDeModos = new JComboBox<>(modosDeJuego);
+        
+        listaDeModos.setPreferredSize(new Dimension(100, 40));
+        
+        listaDeModos.setFont(FUENTE_OPCIONES);
+        
+        
+        diseñoListaDeModos.gridx = 1; diseñoListaDeModos.gridy = 0; 
+        
+        diseñoListaDeModos.anchor = GridBagConstraints.LINE_START;
+        
+        panelListaDeModos.add(listaDeModos, diseñoListaDeModos);
+
+        
+        this.add(panelListaDeModos, BorderLayout.CENTER);
+	}
+
+	private void configurarTitulo() 
+	{
+		titulo = new JLabel(TITULO_APP, SwingConstants.CENTER);
+        titulo.setFont(FUENTE_TITULO);
+        this.add(titulo, BorderLayout.NORTH);
+	}
+    
+	private void agregarAcciones() 
+	{
+        agregarAccionLIstaDeModos();
+
+        agregarAccionDeComoJugar();
+        
+        agregarAccionDeJugar();
+    }
+
+	private void agregarAccionDeJugar() 
+	{
+		botonDeJugar.addActionListener(evento -> 
+        {
+        	_controlador.generarJuego(tamanioSeleccionado);
+        	_controlador.crearVistaJugar();
+            _controlador.mostrarVista("vista del juego");
+        });
+	}
+
+	private void agregarAccionDeComoJugar() 
+	{
+		botonComoJugar.addActionListener(evento -> 
+        {
+        	
+        	_controlador.crearVistaComoJugar();
+            _controlador.mostrarVista("como jugar");
+        });
+	}
+
+	private void agregarAccionLIstaDeModos() 
+	{
+		listaDeModos.addActionListener(evento -> 
+        {
+            String opcionSeleccionada = (String) listaDeModos.getSelectedItem();
+            definirLargoTableroElegido(opcionSeleccionada);
+            System.out.println("Largo seleccionado: " + tamanioSeleccionado);
+        });
+	}
+
+    private void definirLargoTableroElegido(String opcionSeleccionada) {
+        if (opcionSeleccionada.equals("5x5")) tamanioSeleccionado = 5;
+        else if (opcionSeleccionada.equals("10x10")) tamanioSeleccionado = 10;
+        else if (opcionSeleccionada.equals("15x15")) tamanioSeleccionado = 15;
+    }
+    
+    public int getTamanioSeleccionado()
+    {
+    	return tamanioSeleccionado;
+    }
+	
+}

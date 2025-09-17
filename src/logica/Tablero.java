@@ -94,11 +94,13 @@ public abstract class Tablero
         return _tablero;
     }
 
-    public int[][] getReferenciasCol() {
+    public int[][] getReferenciasCol() 
+    {
         return _referenciasCol;
     }
 
-    public int[][] getReferenciasFila() {
+    public int[][] getReferenciasFila() 
+    {
         return _referenciasFila;
     }
 
@@ -124,8 +126,10 @@ public abstract class Tablero
 
     private static void imprimirMatriz(int[][] mat) 
     {	
-        for (int i = 0; i < mat.length; i++) {
-            for (int j = 0; j < mat[i].length; j++) {
+        for (int i = 0; i < mat.length; i++) 
+        {
+            for (int j = 0; j < mat[i].length; j++) 
+            {
                 System.out.print(mat[i][j] + " ");
             }
             System.out.println();
@@ -134,7 +138,8 @@ public abstract class Tablero
     
 
     @Override
-    public String toString() {
+    public String toString() 
+    {
     	
     	System.out.print("Grilla: \n");
         imprimirMatriz(_tablero);

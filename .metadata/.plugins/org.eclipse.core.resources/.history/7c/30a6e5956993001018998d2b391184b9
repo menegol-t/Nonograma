@@ -1,0 +1,107 @@
+package interfaz;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
+public class vistaPerder extends JPanel 
+{
+
+    private Frame controller;
+    private int[][] tableroIncorrecto;
+    private int[][] tableroCorrecto;
+    private int tamanio;
+
+    public vistaPerder(Frame frame) {
+        this.controller = frame;
+        this.tamanio = controller.getTamanioJuego();
+        
+        tableroIncorrecto = controller.conseguirTableroUsuario();
+        tableroCorrecto = controller.conseguirTableroRespuesta();
+        
+        setLayout(new BorderLayout(20, 20)); 
+        setBorder(new EmptyBorder(40, 40, 40, 40)); 
+        setBackground(new Color(25, 25, 25));
+
+        generarContenido();
+    }
+    
+    private void generarContenido() 
+    {
+        JLabel titulo = new JLabel("¡Derrota!", SwingConstants.CENTER);
+        titulo.setFont(new Font("Segoe UI", Font.BOLD, 48));
+        titulo.setForeground(new Color(255, 50, 50));
+        add(titulo, BorderLayout.NORTH);
+
+        JPanel panelesTablero = new JPanel(new GridLayout(1, 2, 40, 0));
+        panelesTablero.setBackground(new Color(25, 25, 25));
+        
+        JPanel panelUsuario = crearPanelTablero("Tu Respuesta", tableroIncorrecto);
+        panelesTablero.add(panelUsuario);
+        
+        JPanel panelCorrecto = crearPanelTablero("La Respuesta Correcta", tableroCorrecto);
+        panelesTablero.add(panelCorrecto);
+
+        add(panelesTablero, BorderLayout.CENTER);
+
+        JButton botonMenu = new JButton("Volver al Menú Principal");
+        botonMenu.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        botonMenu.addActionListener(e -> controller.mostrarVista("menu"));
+        
+        JPanel panelBoton = new JPanel();
+        panelBoton.setBackground(new Color(25, 25, 25));
+        panelBoton.add(botonMenu);
+        
+        add(panelBoton, BorderLayout.SOUTH);
+    }
+    
+    private JPanel crearPanelTablero(String titulo, int[][] tablero) 
+    {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        panel.setBackground(new Color(40, 40, 40));
+
+        JLabel lblTitulo = new JLabel(titulo, SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        lblTitulo.setForeground(Color.WHITE);
+        panel.add(lblTitulo, BorderLayout.NORTH);
+        
+        JPanel tableroGrid = new JPanel(new GridLayout(tamanio, tamanio, 2, 2));
+        tableroGrid.setBackground(new Color(40, 40, 40));
+
+        for (int i = 0; i < tamanio; i++) {
+            for (int j = 0; j < tamanio; j++) {
+                JPanel celda = new JPanel();
+                celda.setPreferredSize(new Dimension(30, 30));
+                
+                if (tablero[i][j] == 1) 
+                { 
+                    celda.setBackground(Color.BLACK);
+                } 
+                else if (tablero[i][j] == 2) 
+                { 
+                    celda.setBackground(Color.LIGHT_GRAY);
+                    JLabel xLabel = new JLabel("X");
+                    xLabel.setForeground(Color.RED);
+                    xLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+                    celda.add(xLabel);
+                } 
+                else 
+                {
+                    celda.setBackground(Color.WHITE);
+                }
+                tableroGrid.add(celda);
+            }
+        }
+        
+        panel.add(tableroGrid, BorderLayout.CENTER);
+        return panel;
+    }
+}

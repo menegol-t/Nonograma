@@ -14,10 +14,10 @@ import java.awt.Dimension;
 public class Frame extends JFrame
 {
 
-	private Juego juegoActual;
-	private JPanel vistaActual;
+	private Juego _juegoActual;
+	private JPanel _vistaActual;
 //	private JPanel nuevaVista;
-	private Map<String, JPanel> vistas;
+	private Map<String, JPanel> _vistas;
 
 	public Frame(Juego juego)
 	{
@@ -27,9 +27,9 @@ public class Frame extends JFrame
         setLocationRelativeTo(null);
         setResizable(false);
       
-        juegoActual = juego;
+        _juegoActual = juego;
         
-        vistas = new HashMap<>();
+        _vistas = new HashMap<>();
         
     	crearVistaMenu();
     	
@@ -39,45 +39,44 @@ public class Frame extends JFrame
 
 	public void generarJuego(int tamanioSeleccionado)
 	{
-		juegoActual.generarJuego(tamanioSeleccionado);
+		_juegoActual.generarJuego(tamanioSeleccionado);
 	}
 	
 	public void cambiarEstadoCasilla(int fila, int columna, int estado)
 	{
-		juegoActual.setCasilla(fila, columna, estado);
+		_juegoActual.setCasilla(fila, columna, estado);
 	}
 	
 	public int[][] conseguirReferenciasFila()
 	{
-		return juegoActual.getReferenciasFilas();
+		return _juegoActual.getReferenciasFilas();
 	}
 	
 	public int[][] conseguirReferenciasCol()
 	{
-		return juegoActual.getReferenciasCol();
+		return _juegoActual.getReferenciasCol();
 	}
 	
 	public int getTamanioJuego()
 	{
-		JPanel menu = vistas.get("menu");
+		JPanel menu = _vistas.get("menu");
 		
-		return ((vistaMenuInicio) menu).getTamanioSeleccionado();
-		
+		return ((VistaMenuInicio) menu).getTamanioSeleccionado();
 	}
 
 	public void mostrarVista(String nombreDeVista) 
 	{
 		
-	    JPanel nuevaVista = vistas.get(nombreDeVista);
+	    JPanel nuevaVista = _vistas.get(nombreDeVista);
 
-	    if (vistaActual != null && vistaActual != nuevaVista) 
+	    if (_vistaActual != null && _vistaActual != nuevaVista) 
 	    {
-	        this.remove(vistaActual);
+	        this.remove(_vistaActual);
 	    }
 	    
 	    this.add(nuevaVista);
 	    
-	    vistaActual = nuevaVista;
+	    _vistaActual = nuevaVista;
 
 	    revalidate();
 	    repaint();
@@ -85,52 +84,52 @@ public class Frame extends JFrame
 
 	public void crearVistaJugar()
 	{
-		vistaJugar vistaDeJuego = new vistaJugar(this);
-		vistas.put("vista del juego", vistaDeJuego);
+		VistaJugar vistaDeJuego = new VistaJugar(this);
+		_vistas.put("vista del juego", vistaDeJuego);
 	}
 
 	public void crearVistaMenu() 
 	{
-		vistaMenuInicio menuInicio = new vistaMenuInicio(this);
-		vistas.put("menu", menuInicio);
+		VistaMenuInicio menuInicio = new VistaMenuInicio(this);
+		_vistas.put("menu", menuInicio);
 	}
 	
 	public void crearVistaComoJugar()
 	{
-		vistaDeComoJugar comoJugar = new vistaDeComoJugar(this);
-		vistas.put("como jugar", comoJugar);
+		VistaDeComoJugar comoJugar = new VistaDeComoJugar(this);
+		_vistas.put("como jugar", comoJugar);
 	}
 
 	public void crearVistaPerdiste()
 	{
-		vistaPerder derrota = new vistaPerder(this);
-		vistas.put("perdiste", derrota);
+		VistaPerder derrota = new VistaPerder(this);
+		_vistas.put("perdiste", derrota);
 	}
 	
-	public void crearVistaGanaste() {
-		vistaGanar victoria = new vistaGanar(this);
-		vistas.put("ganaste", victoria);
+	public void crearVistaGanaste() 
+	{
+		VistaGanar victoria = new VistaGanar(this);
+		_vistas.put("ganaste", victoria);
 	}
 	
- 	public int GetEstadoCasilla(int fila, int columna) {
-		
-		return juegoActual.getCasilla(fila, columna);
-	
+ 	public int GetEstadoCasilla(int fila, int columna) 
+ 	{
+		return _juegoActual.getCasilla(fila, columna);
 	}
 	
 	public boolean verificarResultado()
 	{
-		return juegoActual.validarJuego();
+		return _juegoActual.validarJuego();
 	}
 	
 	public int[][] conseguirTableroUsuario()
 	{
-		return juegoActual.getRespuestaUsuario();
+		return _juegoActual.getRespuestaUsuario();
 	}
 	
 	public int[][] conseguirTableroRespuesta()
 	{
-		return juegoActual.getRespuestaCorrectaTrasFallar();
+		return _juegoActual.getRespuestaCorrectaTrasFallar();
 	}
 
 	

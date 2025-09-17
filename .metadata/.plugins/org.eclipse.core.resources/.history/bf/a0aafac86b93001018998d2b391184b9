@@ -1,0 +1,69 @@
+package interfaz;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
+import java.awt.BorderLayout;
+import java.awt.Font;
+
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
+public class VistaDeComoJugar extends JPanel {
+
+    private Frame _controlador;
+
+    private JTextArea _areaDelTexto;
+    private JScrollPane _panelDeslizable;
+    
+    private static final Font FUENTE_TEXTO = new Font("SansSerif", Font.PLAIN, 14);
+    
+    public VistaDeComoJugar(Frame controller) {
+        
+    	_controlador = controller;
+        
+        this.setLayout(new BorderLayout());
+
+        configurarContenido();
+        
+        agregarBotonDeVolver();
+    }
+
+    private void configurarContenido() {
+        String textoInstrucciones = 
+        			"El nonograma es un tipo de rompecabezas originario de Japón, que se juega sobre una\n"
+                  + "cuadrícula en blanco y negro. Es un juego de ingenio con reglas simples y soluciones desafiantes. Cada casilla de la cuadrícula puede estar pintada de negro o marcada con una X\n"
+                  + "(celda vacía). Las pistas numéricas, ubicadas a la izquierda de cada fila y sobre cada columna,\n"
+                  + "indican las longitudes y el orden de las secuencias de celdas negras que deben aparecer en esa\n"
+                  + "fila o columna. \n\n"
+                  + "Se tiene una grilla de casillas de n x n, que deben ser pintadas de negro o marcadas con\n"
+                  + "una X.\n"
+                  + "– En las pistas, cada numero indica una cadena de celdas negras consecutivas.\n"
+                  + "– Entre dos cadenas de celdas negras debe existir al menos una celda libre, en el ejemplo\n"
+                  + "las marcadas con X.\n"
+                  + "– Al costado de cada fila en la grilla, aparecen los largos de las cadenas de casillas en\n"
+                  + "negro para esa fila.\n"
+                  + "– Sobre cada columna en la grilla, aparecen los largos de las cadenas de casillas en negro\n"
+                  + "para esa columna.\n"
+                  + "– El objetivo es encontrar y marcar todas las casillas negras.";
+
+        _areaDelTexto = new JTextArea(textoInstrucciones);
+        _areaDelTexto.setLineWrap(true);
+        _areaDelTexto.setWrapStyleWord(true);
+        _areaDelTexto.setEditable(false);
+        _areaDelTexto.setFont(FUENTE_TEXTO);
+
+        _panelDeslizable = new JScrollPane(_areaDelTexto);
+        this.add(_panelDeslizable, BorderLayout.CENTER); 
+    }
+
+    private void agregarBotonDeVolver() {
+        JButton botonVolver = new JButton("Volver");
+        
+        botonVolver.addActionListener(e -> {
+            _controlador.mostrarVista("menu"); 
+        });
+        
+        this.add(botonVolver, BorderLayout.SOUTH);
+    }
+}

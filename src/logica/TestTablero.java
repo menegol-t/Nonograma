@@ -1,0 +1,18 @@
+package logica;
+
+public class TestTablero {
+
+	public static void main(String[] args) 
+	{
+		
+		TableroRespuesta r = new TableroRespuesta(5);
+		
+		r.toString();
+		
+//		TableroUsuario u = new TableroUsuario(5);
+//		
+//		u.toString();
+		
+	}
+
+}

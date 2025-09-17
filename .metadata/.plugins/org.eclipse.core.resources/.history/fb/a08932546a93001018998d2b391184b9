@@ -1,0 +1,354 @@
+package interfaz;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+
+public class VistaJugar extends JPanel
+{
+    private Frame _controlador;
+
+    private JPanel _panelTablero;
+    private JPanel panelReferenciasHorizontales;
+    private JPanel panelReferenciasVerticales;
+    private JPanel panelOpciones;
+    private JPanel panelJuego;
+    
+    private static final Font FUENTE_BOTONES = new  Font("Segoe UI", Font.BOLD, 13);
+    private static final Font FUENTE_CASILLAS = new Font("Dialog", Font.BOLD, 40);
+    private static final Font FUENTE_REFERENCIAS = new Font("Segoe UI", Font.BOLD, 14);
+    
+    private static final Color colorFondoReferencias = new Color(31, 43, 52, 200);
+    
+    private static final int CASILLA_BLANCA = 0;
+    private static final int CASILLA_NEGRA = 1;
+    private static final int CASILLA_MARCADA = 2;
+
+    private int tamanioTablero;
+
+    private int[][] referenciasFilas;
+    private int[][] referenciasColumnas; 
+
+    private JButton botonDePista;
+    private JButton botonLimpiarTablero;
+    private JButton botonDeVerificarResultado;
+
+    private JButton[][] casillas; 
+
+    
+
+    public VistaJugar(Frame frame)
+    {
+        this.setLayout(new BorderLayout());        
+
+        _controlador = frame;
+
+        tamanioTablero = _controlador.getTamanioJuego();
+
+        referenciasFilas = _controlador.conseguirReferenciasFila();
+        referenciasColumnas = _controlador.conseguirReferenciasCol();
+
+        generarPaneles();
+
+        configurarBotonesDeOpciones();
+
+        generarCasillas();
+
+        mostrarReferencias();
+    }
+
+    private JButton generarCasilla() 
+    {
+        JButton boton = new JButton("");
+        
+        Border cellBorder = BorderFactory.createLineBorder(Color.DARK_GRAY, 2);
+        
+        boton.setBorder(cellBorder); 
+        
+        boton.setFont(FUENTE_CASILLAS);  
+        boton.setFocusable(false);
+        boton.setBackground(Color.white);
+        boton.setPreferredSize(new Dimension(30, 30));
+        boton.setMaximumSize(new Dimension(30, 30));
+        boton.setMinimumSize(new Dimension(30, 30));
+        boton.setFocusPainted(false);
+        
+        return boton;
+    }
+
+    private void agregarAccionACasilla(JButton boton, int fila, int columna) 
+    {
+
+        boton.addMouseListener(new MouseAdapter() 
+        {
+            @Override
+            public void mouseClicked(MouseEvent evento) 
+            {
+
+                if (evento.getButton() == MouseEvent.BUTTON1) 
+                {
+                    boton.setText("");
+                    boton.setBackground(Color.BLACK);
+                    _controlador.cambiarEstadoCasilla(fila, columna, CASILLA_NEGRA);
+
+                    if (evento.getClickCount() > 1) 
+                    {
+                        _controlador.cambiarEstadoCasilla(fila, columna, CASILLA_BLANCA);
+                        boton.setBackground(Color.WHITE);
+                        boton.setText("");
+                    }
+
+                } 
+                else if (evento.getButton() == MouseEvent.BUTTON3) 
+                {
+                    boton.setBackground(new Color(192, 192, 192));
+                    boton.setForeground(Color.RED);
+                    boton.setText("X");
+                    _controlador.cambiarEstadoCasilla(fila, columna, CASILLA_MARCADA);
+
+                    if (evento.getClickCount() > 1) 
+                    {
+                        _controlador.cambiarEstadoCasilla(fila, columna, CASILLA_BLANCA);
+                        boton.setBackground(Color.WHITE);
+                        boton.setText("");
+                    }
+                }
+
+                _panelTablero.repaint();
+
+                System.out.println("Fila: " + fila);
+                System.out.println("Columna: " + columna);
+                System.out.println();
+            }
+        });
+    }
+
+    private void generarCasillas()
+    {    
+        _panelTablero.removeAll();
+
+        casillas = new JButton[tamanioTablero][tamanioTablero];
+
+        for(int i = 0; i<tamanioTablero; i++)
+        {
+            for(int j = 0; j<tamanioTablero; j++)
+            {    
+                JButton casilla = generarCasilla();
+                agregarAccionACasilla(casilla, i, j);
+                _panelTablero.add(casilla);
+                casillas[i][j] = casilla;
+            }
+        }
+
+        _panelTablero.revalidate();
+        _panelTablero.repaint();
+    }
+
+    private void generarPaneles()
+    {
+    	panelOpciones = new JPanel(new GridLayout(10, 1, 5, 5));
+        panelOpciones.setBorder(new EmptyBorder(10, 10, 10, 11));
+        panelOpciones.setBackground(Color.DARK_GRAY);
+        
+        panelJuego = new JPanel(new GridBagLayout());
+        panelJuego.setBackground(Color.DARK_GRAY);
+
+//        panelJuego.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        
+        add(panelJuego, BorderLayout.CENTER);
+        add(panelOpciones, BorderLayout.EAST);
+        
+        configurarPanelJuego();
+    }
+
+    private void configurarPanelJuego() 
+    {
+        _panelTablero = new JPanel(new GridLayout(tamanioTablero, tamanioTablero));
+        _panelTablero.setBackground(Color.LIGHT_GRAY);
+
+        panelReferenciasHorizontales = new JPanel(new GridLayout(tamanioTablero, 1, 2, 2));
+        panelReferenciasHorizontales.setBackground(new Color(31, 43, 52, 200));
+        panelReferenciasHorizontales.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+        
+        panelReferenciasVerticales = new JPanel(new GridLayout(1, tamanioTablero, 2, 2));
+        panelReferenciasVerticales.setBackground(new Color(31, 43, 52, 200));
+        panelReferenciasVerticales.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+        
+        JPanel panelVacio = new JPanel();
+        panelVacio.setBackground(Color.DARK_GRAY);
+
+        GridBagConstraints diseño = new GridBagConstraints();
+
+        diseño.gridx = 0; diseño.gridy = 0;
+        diseño.weightx = 0.0; diseño.weighty = 0.0;
+        diseño.fill = GridBagConstraints.BOTH;
+        panelJuego.add(panelVacio, diseño);
+
+        diseño.gridx = 1; diseño.gridy = 0;
+        diseño.weightx = 1.0; diseño.weighty = 0.0;
+        diseño.fill = GridBagConstraints.BOTH;
+        panelJuego.add(panelReferenciasVerticales, diseño);
+
+        diseño.gridx = 0; diseño.gridy = 1;
+        diseño.weightx = 0.0; diseño.weighty = 1.0;
+        diseño.fill = GridBagConstraints.BOTH;
+        panelJuego.add(panelReferenciasHorizontales, diseño);
+
+        diseño.gridx = 1; diseño.gridy = 1;
+        diseño.weightx = 1.0; diseño.weighty = 1.0;
+        diseño.fill = GridBagConstraints.BOTH;
+        panelJuego.add(_panelTablero, diseño);
+    }
+    
+    private void mostrarReferencias() 
+    {
+        panelReferenciasHorizontales.setLayout(new GridLayout(tamanioTablero, 1, 2, 2));
+        panelReferenciasHorizontales.setBackground(colorFondoReferencias);
+
+        agregarReferenciasColumnas();
+
+        panelReferenciasVerticales.setLayout(new GridLayout(1, tamanioTablero, 2, 2));
+        panelReferenciasVerticales.setBackground(colorFondoReferencias);
+
+        agregarReferenciasFilas();
+    }
+
+	private void agregarReferenciasFilas() 
+	{
+		for (int i = 0; i < tamanioTablero; i++) 
+        {
+            JPanel columna = new JPanel(new GridLayout(referenciasColumnas[i].length, 1, 2, 2));
+            columna.setBackground(colorFondoReferencias);
+            columna.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); 
+            for (int valor : referenciasColumnas[i]) 
+            {
+                JLabel referencia = new JLabel(valor == 0 ? "" : String.valueOf(valor), SwingConstants.CENTER);
+                referencia.setFont(FUENTE_REFERENCIAS);
+                referencia.setForeground(Color.WHITE);
+                columna.add(referencia);
+            }
+            panelReferenciasVerticales.add(columna);
+        }
+	}
+
+	private void agregarReferenciasColumnas() 
+	{
+		for (int i = 0; i < tamanioTablero; i++) 
+        {
+            JPanel fila = new JPanel(new GridLayout(1, referenciasFilas[i].length, 2, 2));
+            fila.setBackground(colorFondoReferencias);
+            fila.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); 
+            
+            for (int valor : referenciasFilas[i]) 
+            {
+                JLabel referencia = new JLabel(valor == 0 ? "" : String.valueOf(valor), SwingConstants.CENTER);
+                referencia.setFont(FUENTE_REFERENCIAS);
+                referencia.setForeground(Color.WHITE);
+                fila.add(referencia);
+            }
+            panelReferenciasHorizontales.add(fila);
+        }
+	}
+
+    private void configurarBotonesDeOpciones() 
+    {
+        configurarBotonDePista();
+        configurarBotonLimpiarTablero();
+        configurarBotonVerificarResultado();
+        agregarAccionBotonesDelOpciones();
+    }
+
+    private void configurarBotonVerificarResultado() 
+    {
+        botonDeVerificarResultado = new JButton("Verificar Resultado");
+        botonDeVerificarResultado.setBorder(new EmptyBorder(0, 10, 0, 10));
+        panelOpciones.add(botonDeVerificarResultado);
+    }
+
+    private void configurarBotonLimpiarTablero() 
+    {
+        botonLimpiarTablero = new JButton("Limpiar tablero");
+        botonLimpiarTablero.setBorder(new EmptyBorder(0, 10, 0, 10));
+        panelOpciones.add(botonLimpiarTablero);
+        botonLimpiarTablero.setFont(FUENTE_BOTONES);
+    }
+
+    private void limpiarTablero() 
+    {
+        if (casillas == null) return;
+
+        for (int i = 0; i < tamanioTablero; i++) 
+        {
+            for (int j = 0; j < tamanioTablero; j++) 
+            {
+                JButton celda = casillas[i][j];
+                if (celda == null) continue;
+                celda.setText("");
+                celda.setBackground(Color.WHITE);
+                celda.setForeground(UIManager.getColor("Button.foreground"));
+                _controlador.cambiarEstadoCasilla(i, j, CASILLA_BLANCA);
+            }
+        }
+        revalidate();
+        repaint();
+    }
+
+    private void agregarAccionBotonesDelOpciones() 
+    {
+        botonDePista.addMouseListener(new MouseAdapter() 
+        {
+            @Override
+            public void mouseClicked(MouseEvent evento) {
+                JOptionPane.showMessageDialog(botonDePista, "Toma una pista 🧩");
+            }
+        });
+
+        botonLimpiarTablero.addActionListener(evento -> limpiarTablero());
+
+        botonDeVerificarResultado.addMouseListener(new MouseAdapter() 
+        {
+            @Override
+            public void mouseClicked(MouseEvent evento) 
+            {
+            	
+            	if(_controlador.verificarResultado())
+            	{
+            		_controlador.crearVistaGanaste();
+            		_controlador.mostrarVista("ganaste");
+            		
+            	}
+            	
+            	else
+            	{
+            		_controlador.crearVistaPerdiste();
+            		_controlador.mostrarVista("perdiste");
+            	}
+            }
+            
+            
+        });
+    }
+    
+    private void configurarBotonDePista() {
+        botonDePista = new JButton("Dame Una Pista");
+        botonDePista.setBorder(new EmptyBorder(0, 10, 0, 10));
+        panelOpciones.add(botonDePista);
+        botonDePista.setFont(FUENTE_BOTONES);
+    }
+}

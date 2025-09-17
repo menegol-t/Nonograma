@@ -14,24 +14,20 @@ public class Main
 	{
 		Juego juego = new Juego();
 		
-		
 		SwingUtilities.invokeLater(() -> 
 		{
-            try {
-                
+            try
+            {    
                 FlatDarkLaf.setup();
-            } catch (Exception e) {
+            } 
+            catch (Exception e)
+            {
                 e.printStackTrace();
             }
 
             Frame nonogramFrame = new Frame(juego);
             nonogramFrame.setVisible(true);
-            
-            
-        });
-		
-		
-		
+                   
+        });		
 	}
-
 }
